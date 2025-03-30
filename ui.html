@@ -565,7 +565,7 @@
         position: relative;
         top: -8px; /* Move up */
         margin-left: -2px;
-        margin-bottom: -2px;
+        margin-bottom: -8px;
         /* background-color: rgba(0, 0, 0, 0.05); */
         /* padding: 1px 4px; */
         border-radius: var(--radius-full);
@@ -578,6 +578,7 @@
         padding-bottom: 16px; /* Add padding at the bottom */
         margin-right: -4px; /* Make room for scrollbar */
         padding-right: 4px; /* Spacing */
+        max-height: 70%;
       }
 
       /* Search results */
@@ -2155,7 +2156,8 @@
           editButton.className = "icon-btn tooltip tooltip-left";
           editButton.setAttribute("data-tooltip", "Open Asterisk");
           editButton.innerHTML =
-            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+            // '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+            '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_38_125)"> <path d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z" fill="#759481"/></g><defs><clipPath id="clip0_38_125"><rect width="20" height="20" fill="white"/></clipPath></defs></svg>';
 
           editButton.addEventListener("click", (e) => {
             e.stopPropagation(); // Prevent triggering the parent click
@@ -2268,7 +2270,7 @@
 
         // Minimum size constraints
         const width = Math.max(280, newWidth);
-        const height = Math.max(300, newHeight);
+        const height = Math.max(500, newHeight);
 
         // Tell the plugin to resize
         parent.postMessage(
