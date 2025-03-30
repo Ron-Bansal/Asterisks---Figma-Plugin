@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Settings Panel */
+      .settings-panel {
+        position: absolute;
+        top: 52px;
+        right: 16px;
+        background-color: var(--bg-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
+        width: 260px;
+        padding: 16px;
+        z-index: 100;
+        animation: fadeIn 0.2s;
+        display: none;
+      }
+
+      .settings-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+
+      .settings-title {
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .settings-option {
+        margin-bottom: 16px;
+      }
+
+      .settings-option:last-child {
+        margin-bottom: 0;
+      }
+
+      .settings-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        font-size: 13px;
+        color: var(--text-color);
+      } /* Modern Design System Variables */
+      :root {
+        /* Core colors */
+        --green-500: #60a5a9;
+        --green-600: #4d8a8d;
+        --green-700: #3a6f72;
+        --overlay-hover: rgba(0, 0, 0, 0.05);
+
+        /* Light theme */
+        --bg-color: #ffffff;
+        --bg-secondary: #f7f8f8;
+        --card-bg: #f5f5f5;
+        --text-color: #2c3436;
+        --text-secondary: #6b7780;
+        --text-placeholder: #a1a9b3;
+        --text-disabled: #c4c9ce;
+        --border-color: #e1e6e9;
+        --border-hover: #d1d6d9;
+        --primary-color: var(--green-600);
+        --primary-hover: var(--green-700);
+        --primary-bg: var(--green-500);
+        --primary-bg-hover: var(--green-600);
+        --tag-bg: #e7f2f2;
+        --tag-color: var(--green-700);
+        --tag-border: #d5e6e7;
+        --input-bg: #ffffff;
+        --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+        --shadow-md: 0 2px 4px rgba(16, 24, 40, 0.05);
+        --shadow-lg: 0 4px 8px rgba(16, 24, 40, 0.05);
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+        --radius-full: 9999px;
+      }
+
+      /* Dark theme */
+      .dark-theme {
+        --bg-color: #0a0d10;
+        --bg-secondary: #13171b;
+        --card-bg: #1c2126;
+        --text-color: #ffffff;
+        --text-secondary: #adb5bd;
+        --text-placeholder: #6c757d;
+        --text-disabled: #495057;
+        --border-color: #2a2f34;
+        --border-hover: #3a3f44;
+        --primary-color: var(--green-500);
+        --primary-hover: var(--green-600);
+        --primary-bg: var(--green-600);
+        --primary-bg-hover: var(--green-700);
+        --tag-bg: #2c3f40;
+        --tag-color: #a7cfd1;
+        --tag-border: #3e5859;
+        --input-bg: #13171b;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Base Styles */
+      * {
+        box-sizing: border-box;
+        transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+          opacity 0.2s, transform 0.2s;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      /* Main Container */
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      /* Header Styles */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color);
+        background-color: var(--bg-color);
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .header-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: var(--text-color);
+        font-size: 16px;
+      }
+
+      .logo-icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: var(--radius-sm);
+      }
+
+      .tabs {
+        display: flex;
+        gap: 16px;
+        margin-left: 4px;
+      }
+
+      .tab {
+        position: relative;
+        padding: 8px 4px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 14px;
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .tab:hover {
+        color: var(--text-color);
+      }
+
+      .tab.active {
+        color: var(--primary-color);
+      }
+
+      .tab.active::after {
+        content: "";
+        position: absolute;
+        bottom: -13px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: var(--primary-color);
+      }
+
+      .tab svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* Content Area */
+      .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      /* Button Styles */
+      .icon-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-md);
+        background-color: transparent;
+        color: var(--text-secondary);
+        border: none;
+        cursor: pointer;
+      }
+
+      .icon-btn:hover {
+        background-color: var(--overlay-hover);
+        color: var(--text-color);
+      }
+
+      .icon-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Primary button */
+      .primary-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 16px;
+        background-color: var(--primary-bg);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+        width: 100%;
+      }
+
+      .primary-btn:hover {
+        background-color: var(--primary-bg-hover);
+      }
+
+      .primary-btn:active {
+        transform: translateY(1px);
+      }
+
+      .primary-btn:disabled {
+        background-color: var(--card-bg);
+        color: var(--text-disabled);
+        cursor: not-allowed;
+      }
+
+      /* Layer Info */
+      .layer-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background-color: var(--card-bg);
+        border-radius: var(--radius-md);
+        margin-bottom: 8px;
+        border: 1px solid var(--border-color);
+      }
+
+      .layer-icon {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: var(--radius-sm);
+        flex-shrink: 0;
+      }
+
+      .layer-details {
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .layer-name {
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: var(--text-color);
+      }
+
+      .layer-type {
+        color: var(--text-secondary);
+        font-size: 12px;
+      }
+
+      /* Form Styles */
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+        color: var(--text-color);
+        font-size: 13px;
+      }
+
+      .input-group {
+        position: relative;
+      }
+
+      .input-field {
+        width: 100%;
+        padding: 10px 12px;
+        background-color: var(--input-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        font-size: 14px;
+        color: var(--text-color);
+        transition: border-color 0.2s;
+      }
+
+      .input-field:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+
+      .input-field::placeholder {
+        color: var(--text-placeholder);
+      }
+
+      /* Search Input */
+      .input-with-icon {
+        padding-left: 36px;
+      }
+
+      .input-icon {
+        position: absolute;
+        top: 50%;
+        left: 12px;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        pointer-events: none;
+      }
+
+      .input-icon svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Action buttons */
+      .action-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 6px 10px;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        color: var(--text-secondary);
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .action-btn:hover {
+        background-color: var(--overlay-hover);
+        border-color: var(--border-hover);
+        color: var(--text-color);
+      }
+
+      .action-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .notes-field {
+        min-height: 80px;
+        resize: vertical;
+        font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+      }
+
+      /* Tags */
+      .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .tag {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px 4px 10px;
+        background-color: var(--tag-bg);
+        border: 1px solid var(--tag-border);
+        border-radius: var(--radius-full);
+        color: var(--tag-color);
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .tag-remove {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: transparent;
+      }
+
+      .tag-remove:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .tag-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        max-height: 150px;
+        overflow-y: auto;
+        background-color: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+        z-index: 10;
+        margin-top: 4px;
+        display: none;
+      }
+
+      .tag-suggestion-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .tag-suggestion-item:hover {
+        background-color: var(--overlay-hover);
+      }
+
+      .tag-count {
+        font-size: 12px;
+        color: var(--text-secondary);
+        background-color: rgba(0, 0, 0, 0.05);
+        padding: 2px 6px;
+        border-radius: var(--radius-full);
+      }
+
+      /* Search Page */
+      .search-page {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        /* padding: 16px; */
+        padding: 16px 16px 0 16px; /* Remove bottom padding */
+        overflow: hidden; /* Add this */
+      }
+
+      /* Filter tags */
+      .filter-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 12px 0;
+      }
+
+      .filter-tag {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-full);
+        color: var(--text-secondary);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .filter-tag:hover {
+        background-color: var(--tag-bg);
+        border-color: var(--tag-border);
+        color: var(--tag-color);
+      }
+
+      .filter-tag.active {
+        background-color: var(--tag-bg);
+        border-color: var(--tag-border);
+        color: var(--tag-color);
+      }
+
+      /* .filter-count {
+        font-size: 12px;
+        background-color: rgba(0, 0, 0, 0.05);
+        padding: 1px 6px;
+        border-radius: var(--radius-full);
+        color: var(--text-secondary);
+      } */
+
+      .filter-count {
+        font-size: 10px; /* Make smaller */
+        position: relative;
+        top: -8px; /* Move up */
+        margin-left: -2px;
+        margin-bottom: -2px;
+        /* background-color: rgba(0, 0, 0, 0.05); */
+        /* padding: 1px 4px; */
+        border-radius: var(--radius-full);
+        color: var(--text-secondary);
+      }
+
+      .search-results {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 16px; /* Add padding at the bottom */
+        margin-right: -4px; /* Make room for scrollbar */
+        padding-right: 4px; /* Spacing */
+      }
+
+      /* Search results */
+      .search-status {
+        margin: 12px 0;
+        color: var(--text-secondary);
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .asterisk-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .asterisk-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 12px;
+        background-color: var(--card-bg);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+      }
+
+      .asterisk-item:hover {
+        border-color: var(--border-hover);
+        background-color: var(--bg-secondary);
+      }
+
+      .asterisk-content {
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .asterisk-name {
+        font-weight: 600;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .asterisk-meta {
+        color: var(--text-secondary);
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Asterisk tags */
+      .asterisk-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 4px;
+      }
+
+      .asterisk-tag {
+        padding: 2px 6px;
+        background-color: var(--tag-bg);
+        border-radius: var(--radius-full);
+        color: var(--tag-color);
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .asterisk-goto {
+        margin-left: 8px;
+      }
+
+      /* Empty States */
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 16px;
+        text-align: center;
+        color: var(--text-secondary);
+        height: 100%;
+      }
+
+      .empty-state-icon {
+        margin-bottom: 16px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--card-bg);
+        border-radius: var(--radius-md);
+        color: var(--primary-color);
+      }
+
+      .empty-state-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .empty-state-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-color);
+        font-size: 15px;
+      }
+
+      .empty-state-text {
+        font-size: 14px;
+        max-width: 260px;
+        line-height: 1.5;
+      }
+
+      /* Select Layer State */
+      .select-layer {
+        padding: 14px;
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+
+      .select-layer-icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+      }
+
+      .select-layer-text {
+        flex: 1;
+        font-size: 14px;
+      }
+
+      /* Status indicator */
+      .status-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        margin-top: 12px;
+        font-weight: 500;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+      }
+
+      /* Settings Panel */
+      .settings-panel {
+        position: absolute;
+        top: 52px;
+        right: 16px;
+        background-color: var(--bg-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
+        width: 260px;
+        padding: 16px;
+        z-index: 100;
+        animation: fadeIn 0.2s;
+        display: none;
+      }
+
+      .settings-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+
+      .settings-title {
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .settings-option {
+        margin-bottom: 16px;
+      }
+
+      .settings-option:last-child {
+        margin-bottom: 0;
+      }
+
+      .settings-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 36px;
+        height: 20px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+
+      .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 14px;
+        width: 14px;
+        left: 2px;
+        bottom: 2px;
+        background-color: var(--text-secondary);
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .toggle-slider {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+
+      input:checked + .toggle-slider:before {
+        transform: translateX(16px);
+        background-color: white;
+      }
+
+      .toggle-group {
+        display: flex;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+
+      .toggle-option {
+        flex: 1;
+        text-align: center;
+        padding: 6px 10px;
+        font-size: 13px;
+        cursor: pointer;
+        background-color: var(--bg-color);
+        color: var(--text-secondary);
+        font-weight: 500;
+        position: relative;
+      }
+
+      .toggle-option.active {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      /* Notification */
+      .notification {
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px 16px;
+        border-radius: var(--radius-full);
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: var(--shadow-md);
+        opacity: 0;
+        transition: transform 0.3s, opacity 0.3s;
+        z-index: 1000;
+      }
+
+      .notification.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(10px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* Loading spinner */
+      .spinner {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-top-color: var(--primary-color);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .resize-handle {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 16px;
+        height: 16px;
+        cursor: nwse-resize;
+        z-index: 100;
+      }
+
+      .resize-handle::after {
+        content: "";
+        position: absolute;
+        right: 4px;
+        bottom: 4px;
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid var(--text-secondary);
+        border-bottom: 2px solid var(--text-secondary);
+        opacity: 0.6;
+      }
+
+      .go-to-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .go-to-text {
+        opacity: 0;
+        max-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        transition: opacity 0.2s ease, max-width 0.3s ease;
+      }
+
+      .asterisk-item:hover .go-to-text {
+        opacity: 1;
+        max-width: 100px;
+      }
+
+      .asterisk-goto {
+        margin-left: 0;
+      }
+
+      /* Tooltip styling */
+      .tooltip {
+        position: relative;
+      }
+
+      .tooltip::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: 115%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 4px 8px;
+        background-color: var(--text-color);
+        color: white;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s;
+        z-index: 10;
+      }
+
+      .tooltip:hover::after {
+        opacity: 1;
+      }
+
+      /* Ensure tooltip doesn't get cut off at the edge */
+      .tooltip.tooltip-left::after {
+        left: -20px;
+        transform: translateX(0);
+      }
+
+      .tooltip.tooltip-right::after {
+        left: auto;
+        right: -10px;
+        transform: translateX(0);
+      }
+
+      .action-buttons-container {
+        display: flex;
+        gap: 4px;
+      }
+
+      .asterisk-item:hover .action-buttons-container {
+        opacity: 1;
+      }
+
+      .asterisk-item .action-buttons-container {
+        opacity: 0.6;
+        transition: opacity 0.2s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left">
+          <!-- <div class="header-title">
+            <div class="logo-icon">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                ></polygon>
+              </svg>
+            </div>
+            <span>Asterisk</span>
+          </div> -->
+          <div class="tabs">
+            <button class="tab active" data-tab="add">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+              Add Asterisk
+            </button>
+            <button class="tab" data-tab="search">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              Search
+            </button>
+          </div>
+        </div>
+        <div class="header-right">
+          <button id="settings-button" class="icon-btn">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="3"></circle>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Add Asterisk Tab Content -->
+      <div id="add-tab-content" class="content">
+        <!-- Layer Info (shown when a layer is selected) -->
+        <div id="layer-info" class="layer-info" style="display: none">
+          <div class="layer-icon">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              ></polygon>
+            </svg>
+          </div>
+          <div class="layer-details">
+            <div id="layer-name" class="layer-name">Layer name</div>
+            <div class="layer-type">Selected layer</div>
+          </div>
+        </div>
+
+        <!-- Select Layer State (shown when no layer is selected) -->
+        <div id="select-layer" class="select-layer">
+          <div class="select-layer-icon">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              ></polygon>
+            </svg>
+          </div>
+          <div class="select-layer-text">
+            Click on an element to add or edit its note
+          </div>
+        </div>
+
+        <!-- Form Container -->
+        <div id="form-container" style="display: none">
+          <!-- Source URL -->
+          <div class="form-group">
+            <label class="form-label">Link to source</label>
+            <div class="input-group">
+              <input
+                type="url"
+                id="source-url"
+                class="input-field"
+                placeholder="https://..."
+              />
+              <div class="action-buttons">
+                <button
+                  id="open-link-button"
+                  class="action-btn"
+                  style="display: none"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                    ></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                  Open link
+                </button>
+                <button
+                  id="copy-link-button"
+                  class="action-btn"
+                  style="display: none"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect
+                      x="9"
+                      y="9"
+                      width="13"
+                      height="13"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <path
+                      d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                    ></path>
+                  </svg>
+                  Copy link
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="form-group">
+            <label class="form-label">Add tags</label>
+            <div class="input-group">
+              <input
+                type="text"
+                id="tag-input"
+                class="input-field"
+                placeholder="layout • first draft • get feedback"
+              />
+              <button
+                id="add-tag-button"
+                class="icon-btn"
+                style="position: absolute; right: 4px; top: 4px"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+              </button>
+              <div id="tag-suggestions" class="tag-suggestions"></div>
+            </div>
+            <div id="tags-container" class="tags-container"></div>
+          </div>
+
+          <!-- Notes -->
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea
+              id="notes"
+              class="input-field notes-field"
+              placeholder="Add your notes..."
+            ></textarea>
+          </div>
+
+          <!-- Save Button -->
+          <button id="save-button" class="primary-btn">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+              ></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            Save note
+          </button>
+
+          <!-- Status Indicator -->
+          <div
+            id="status-indicator"
+            class="status-indicator"
+            style="display: none"
+          >
+            <span class="status-dot"></span>
+            <span>Draft auto-saved</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Tab Content -->
+      <div id="search-tab-content" class="search-page" style="display: none">
+        <!-- Search Input -->
+        <div class="input-group">
+          <div class="input-icon">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="search-input"
+            class="input-field input-with-icon"
+            placeholder="Search Asterisks by tag, source, or note"
+          />
+        </div>
+
+        <!-- Empty State for Search -->
+        <div id="empty-search" class="empty-state" style="display: none">
+          <div class="empty-state-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              ></polygon>
+            </svg>
+          </div>
+          <div class="empty-state-title">No Asterisks yet</div>
+          <div class="empty-state-text">
+            Select any layer and add an Asterisk to start building your
+            collection.
+          </div>
+        </div>
+
+        <!-- Search Content (shown when elements exist) -->
+        <div id="search-content">
+          <!-- Filter Tags -->
+          <div id="filter-tags" class="filter-tags"></div>
+
+          <!-- Search Status -->
+          <div id="search-status" class="search-status">
+            Showing all Asterisks
+          </div>
+
+          <!-- Search Results -->
+          <div class="search-results">
+            <div id="asterisk-list" class="asterisk-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div id="settings-panel" class="settings-panel">
+        <div class="settings-header">
+          <div class="settings-title">Settings</div>
+          <button id="close-settings" class="icon-btn">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="settings-option">
+          <label class="settings-label">Theme</label>
+          <div class="toggle-group">
+            <div class="toggle-option theme-option active" data-value="light">
+              Light
+            </div>
+            <div class="toggle-option theme-option" data-value="dark">Dark</div>
+          </div>
+        </div>
+
+        <div class="settings-option">
+          <label class="settings-label">Auto-save drafts</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="autosave-toggle" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Notification -->
+      <div id="notification" class="notification"></div>
+      <div id="resize-handle" class="resize-handle"></div>
+    </div>
+
+    <script>
+      // Global state
+      let currentTags = [];
+      let currentNodeName = "";
+      let currentNodeId = "";
+      let preferences = {
+        theme: "light",
+        autosave: true,
+      };
+      let autosaveTimer = null;
+      let allTags = []; // For tag suggestions with counts
+      let allElements = []; // For search tab
+      let activeTab = "add"; // "add" or "search"
+      let activeFilterTags = []; // For filtering elements in search tab
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initialize
+        parent.postMessage({ pluginMessage: { type: "get-metadata" } }, "*");
+        parent.postMessage({ pluginMessage: { type: "get-all-tags" } }, "*");
+        parent.postMessage(
+          { pluginMessage: { type: "get-all-elements" } },
+          "*"
+        );
+
+        // Tab switching
+        setupTabSwitching();
+
+        // Settings panel
+        setupSettingsPanel();
+
+        // Tag input handling
+        setupTagInput();
+
+        // URL field handling
+        setupUrlField();
+
+        // Save button
+        setupSaveButton();
+
+        // Listen for messages from the plugin
+        setupPluginMessageListener();
+      });
+
+      // Tab switching functionality
+      function setupTabSwitching() {
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.addEventListener("click", function () {
+            const tabName = this.dataset.tab;
+            switchTab(tabName);
+          });
+        });
+      }
+
+      function switchTab(tabName) {
+        activeTab = tabName;
+
+        // Update tab buttons
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.remove("active");
+          if (tab.dataset.tab === tabName) {
+            tab.classList.add("active");
+          }
+        });
+
+        // Show/hide content based on active tab
+        if (tabName === "add") {
+          document.getElementById("add-tab-content").style.display = "block";
+          document.getElementById("search-tab-content").style.display = "none";
+        } else if (tabName === "search") {
+          document.getElementById("add-tab-content").style.display = "none";
+          document.getElementById("search-tab-content").style.display = "block";
+
+          // Refresh elements list when switching to search tab
+          parent.postMessage(
+            { pluginMessage: { type: "get-all-elements" } },
+            "*"
+          );
+          parent.postMessage({ pluginMessage: { type: "get-all-tags" } }, "*");
+        }
+      }
+
+      // Settings panel functionality
+      function setupSettingsPanel() {
+        // Toggle settings panel visibility
+        document
+          .getElementById("settings-button")
+          .addEventListener("click", function () {
+            const panel = document.getElementById("settings-panel");
+            panel.style.display =
+              panel.style.display === "block" ? "none" : "block";
+          });
+
+        // Close settings panel
+        document
+          .getElementById("close-settings")
+          .addEventListener("click", function () {
+            document.getElementById("settings-panel").style.display = "none";
+          });
+
+        // Theme toggling
+        document.querySelectorAll(".theme-option").forEach((option) => {
+          option.addEventListener("click", function () {
+            const theme = this.dataset.value;
+            updateTheme(theme);
+
+            // Update UI
+            document.querySelectorAll(".theme-option").forEach((opt) => {
+              opt.classList.remove("active");
+            });
+            this.classList.add("active");
+
+            // Update preferences
+            preferences.theme = theme;
+            savePreferences();
+          });
+        });
+
+        // Autosave toggle
+        document
+          .getElementById("autosave-toggle")
+          .addEventListener("change", function () {
+            preferences.autosave = this.checked;
+            updateAutosave();
+            savePreferences();
+          });
+
+        // Handle clicks outside settings panel
+        document.addEventListener("click", function (event) {
+          const panel = document.getElementById("settings-panel");
+          const settingsButton = document.getElementById("settings-button");
+
+          if (
+            panel.style.display === "block" &&
+            !panel.contains(event.target) &&
+            event.target !== settingsButton &&
+            !settingsButton.contains(event.target)
+          ) {
+            panel.style.display = "none";
+          }
+        });
+      }
+
+      // Save preferences
+      function savePreferences() {
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: "update-preferences",
+              preferences,
+            },
+          },
+          "*"
+        );
+      }
+
+      // Tag input handling
+      function setupTagInput() {
+        const tagInput = document.getElementById("tag-input");
+
+        // Add tag on Enter
+        tagInput.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" && this.value.trim() !== "") {
+            addTag(this.value.trim());
+            this.value = "";
+            e.preventDefault();
+            autosaveDraft();
+          }
+        });
+
+        // Show tag suggestions on input
+        tagInput.addEventListener("input", function () {
+          showTagSuggestions(this.value.trim());
+        });
+
+        // Hide suggestions on blur
+        tagInput.addEventListener("blur", function () {
+          setTimeout(() => {
+            document.getElementById("tag-suggestions").style.display = "none";
+          }, 200);
+        });
+
+        // Add tag button
+        document
+          .getElementById("add-tag-button")
+          .addEventListener("click", function () {
+            const tagInput = document.getElementById("tag-input");
+            if (tagInput.value.trim() !== "") {
+              addTag(tagInput.value.trim());
+              tagInput.value = "";
+              tagInput.focus();
+              autosaveDraft();
+            }
+          });
+      }
+
+      // URL field handling
+      function setupUrlField() {
+        const sourceUrl = document.getElementById("source-url");
+
+        sourceUrl.addEventListener("input", function () {
+          const url = this.value.trim();
+          const openLinkBtn = document.getElementById("open-link-button");
+          const copyLinkBtn = document.getElementById("copy-link-button");
+
+          if (url) {
+            openLinkBtn.style.display = "flex";
+            copyLinkBtn.style.display = "flex";
+          } else {
+            openLinkBtn.style.display = "none";
+            copyLinkBtn.style.display = "none";
+          }
+
+          autosaveDraft();
+        });
+
+        // Open link button
+        document
+          .getElementById("open-link-button")
+          .addEventListener("click", function () {
+            const url = document.getElementById("source-url").value.trim();
+            if (url) {
+              window.open(url, "_blank");
+            }
+          });
+
+        // Copy link button
+        document
+          .getElementById("copy-link-button")
+          .addEventListener("click", function () {
+            const url = document.getElementById("source-url").value.trim();
+            if (url) {
+              navigator.clipboard.writeText(url).then(() => {
+                showNotification("URL copied to clipboard");
+              });
+            }
+          });
+
+        // Notes field
+        document.getElementById("notes").addEventListener("input", function () {
+          autosaveDraft();
+        });
+      }
+
+      // Save button functionality
+      function setupSaveButton() {
+        document
+          .getElementById("save-button")
+          .addEventListener("click", function () {
+            saveMetadata();
+          });
+      }
+
+      // Plugin message listener
+      function setupPluginMessageListener() {
+        window.onmessage = (event) => {
+          const msg = event.data.pluginMessage;
+
+          if (!msg) return;
+
+          switch (msg.type) {
+            case "init-preferences":
+              preferences = msg.preferences;
+              updateTheme(preferences.theme);
+              updateAutosave();
+              break;
+
+            case "metadata-loaded":
+              displayMetadata(msg.data);
+              updateLayerInfo(msg.nodeName, msg.nodeId);
+              showLayerSelected();
+              break;
+
+            case "draft-loaded":
+              displayMetadata(msg.data);
+              updateLayerInfo(msg.nodeName, msg.nodeId);
+              showDraftStatus();
+              showLayerSelected();
+              break;
+
+            case "new-element":
+              clearForm();
+              updateLayerInfo(msg.nodeName, msg.nodeId);
+              showLayerSelected();
+              break;
+
+            case "no-selection":
+              clearForm();
+              showSelectLayer();
+              break;
+
+            case "selection-changed":
+              parent.postMessage(
+                { pluginMessage: { type: "get-metadata" } },
+                "*"
+              );
+              break;
+
+            case "all-tags":
+              allTags = msg.tags || [];
+              updateFilterTags();
+              break;
+
+            case "all-elements":
+              allElements = msg.elements || [];
+              renderElementsList();
+              toggleEmptySearch();
+              break;
+          }
+        };
+      }
+
+      // Update theme
+      function updateTheme(theme) {
+        if (theme === "dark") {
+          document.body.classList.add("dark-theme");
+        } else {
+          document.body.classList.remove("dark-theme");
+        }
+
+        // Update settings UI
+        document.querySelectorAll(".theme-option").forEach((option) => {
+          option.classList.remove("active");
+          if (option.dataset.value === theme) {
+            option.classList.add("active");
+          }
+        });
+      }
+
+      // Update autosave
+      function updateAutosave() {
+        document.getElementById("autosave-toggle").checked =
+          preferences.autosave;
+
+        if (preferences.autosave) {
+          document.getElementById("status-indicator").style.display = "flex";
+        } else {
+          document.getElementById("status-indicator").style.display = "none";
+
+          // Clear any existing autosave timer
+          if (autosaveTimer) {
+            clearTimeout(autosaveTimer);
+            autosaveTimer = null;
+          }
+        }
+      }
+
+      // Show tag suggestions
+      function showTagSuggestions(query) {
+        const container = document.getElementById("tag-suggestions");
+
+        // Clear previous suggestions
+        container.innerHTML = "";
+
+        if (!query || query.length < 1) {
+          container.style.display = "none";
+          return;
+        }
+
+        // Filter tags based on query
+        const filteredTags = allTags.filter(
+          (tag) =>
+            tag.tag.toLowerCase().includes(query.toLowerCase()) &&
+            !currentTags.includes(tag.tag)
+        );
+
+        if (filteredTags.length === 0) {
+          container.style.display = "none";
+          return;
+        }
+
+        // Create suggestion items
+        filteredTags.slice(0, 5).forEach((tag) => {
+          const item = document.createElement("div");
+          item.className = "tag-suggestion-item";
+
+          const tagName = document.createElement("span");
+          tagName.textContent = tag.tag;
+
+          const tagCount = document.createElement("span");
+          tagCount.className = "tag-count";
+          tagCount.textContent = tag.count;
+
+          item.appendChild(tagName);
+          item.appendChild(tagCount);
+
+          item.addEventListener("click", () => {
+            addTag(tag.tag);
+            document.getElementById("tag-input").value = "";
+            container.style.display = "none";
+            autosaveDraft();
+          });
+
+          container.appendChild(item);
+        });
+
+        container.style.display = "block";
+      }
+
+      // Add tag
+      function addTag(tag) {
+        if (!currentTags.includes(tag)) {
+          currentTags.push(tag);
+          updateTagsDisplay();
+        }
+      }
+
+      // Remove tag
+      function removeTag(tag) {
+        currentTags = currentTags.filter((t) => t !== tag);
+        updateTagsDisplay();
+        autosaveDraft();
+      }
+
+      // Update tags display
+      function updateTagsDisplay() {
+        const container = document.getElementById("tags-container");
+        container.innerHTML = "";
+
+        if (currentTags.length === 0) {
+          return;
+        }
+
+        currentTags.forEach((tag) => {
+          const tagElement = document.createElement("div");
+          tagElement.className = "tag";
+
+          const tagText = document.createElement("span");
+          tagText.textContent = tag;
+
+          const removeButton = document.createElement("span");
+          removeButton.className = "tag-remove";
+          removeButton.innerHTML =
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+
+          removeButton.addEventListener("click", () => {
+            removeTag(tag);
+          });
+
+          tagElement.appendChild(tagText);
+          tagElement.appendChild(removeButton);
+          container.appendChild(tagElement);
+        });
+      }
+
+      // Update layer info
+      function updateLayerInfo(nodeName, nodeId) {
+        currentNodeName = nodeName;
+        currentNodeId = nodeId;
+
+        document.getElementById("layer-name").textContent = nodeName;
+      }
+
+      // Display metadata
+      function displayMetadata(data) {
+        const sourceUrl = data.sourceUrl || "";
+        const notes = data.notes || "";
+
+        document.getElementById("source-url").value = sourceUrl;
+        document.getElementById("notes").value = notes;
+
+        // Update URL button visibility
+        const openLinkBtn = document.getElementById("open-link-button");
+        const copyLinkBtn = document.getElementById("copy-link-button");
+
+        if (sourceUrl) {
+          openLinkBtn.style.display = "flex";
+          copyLinkBtn.style.display = "flex";
+        } else {
+          openLinkBtn.style.display = "none";
+          copyLinkBtn.style.display = "none";
+        }
+
+        // Update tags
+        currentTags = data.tags || [];
+        updateTagsDisplay();
+      }
+
+      // Clear form
+      function clearForm() {
+        document.getElementById("source-url").value = "";
+        document.getElementById("notes").value = "";
+        document.getElementById("open-link-button").style.display = "none";
+        document.getElementById("copy-link-button").style.display = "none";
+
+        // Clear status indicators
+        document.getElementById("status-indicator").style.display = "none";
+
+        // Clear tags
+        currentTags = [];
+        updateTagsDisplay();
+
+        // Clear node ID
+        currentNodeId = "";
+      }
+
+      // Show layer selected state
+      function showLayerSelected() {
+        document.getElementById("layer-info").style.display = "flex";
+        document.getElementById("select-layer").style.display = "none";
+        document.getElementById("form-container").style.display = "block";
+      }
+
+      // Show select layer state
+      function showSelectLayer() {
+        document.getElementById("layer-info").style.display = "none";
+        document.getElementById("select-layer").style.display = "flex";
+        document.getElementById("form-container").style.display = "none";
+      }
+
+      // Show draft status
+      function showDraftStatus() {
+        if (preferences.autosave) {
+          document.getElementById("status-indicator").style.display = "flex";
+        }
+      }
+
+      // Save metadata
+      function saveMetadata() {
+        // Get values from form
+        const sourceUrl = document.getElementById("source-url").value;
+        const notes = document.getElementById("notes").value;
+
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: "save-metadata",
+              sourceUrl,
+              tags: currentTags,
+              notes,
+            },
+          },
+          "*"
+        );
+
+        // Hide draft indicator
+        document.getElementById("status-indicator").style.display = "none";
+
+        // Show notification
+        showNotification("Note saved successfully!");
+
+        // Refresh the elements list if we're in search tab
+        if (activeTab === "search") {
+          parent.postMessage(
+            { pluginMessage: { type: "get-all-elements" } },
+            "*"
+          );
+        }
+      }
+
+      // Autosave draft
+      function autosaveDraft() {
+        if (!currentNodeId) return;
+
+        // Clear any existing timer
+        if (autosaveTimer) {
+          clearTimeout(autosaveTimer);
+        }
+
+        // Set new timer to save after a short delay
+        autosaveTimer = setTimeout(() => {
+          // Get values from form
+          const sourceUrl = document.getElementById("source-url").value;
+          const notes = document.getElementById("notes").value;
+
+          // Save directly instead of as draft
+          parent.postMessage(
+            {
+              pluginMessage: {
+                type: "save-metadata", // Changed from save-draft to save-metadata
+                sourceUrl,
+                tags: currentTags,
+                notes,
+              },
+            },
+            "*"
+          );
+        }, 1000); // 1 second delay
+      }
+
+      // Show notification
+      function showNotification(message) {
+        const notification = document.getElementById("notification");
+        notification.textContent = message;
+        notification.classList.add("show");
+
+        setTimeout(() => {
+          notification.classList.remove("show");
+        }, 3000);
+      }
+
+      // Update filter tags in search tab
+      function updateFilterTags() {
+        const filterContainer = document.getElementById("filter-tags");
+
+        // Clear existing tags
+        filterContainer.innerHTML = "";
+
+        // Create filter tags from all unique tags
+        allTags.forEach((tag) => {
+          const filterTag = document.createElement("div");
+          filterTag.className = "filter-tag";
+          if (activeFilterTags.includes(tag.tag)) {
+            filterTag.classList.add("active");
+          }
+
+          const tagName = document.createElement("span");
+          tagName.textContent = tag.tag;
+
+          const countBadge = document.createElement("span");
+          countBadge.className = "filter-count";
+          countBadge.textContent = tag.count;
+
+          filterTag.appendChild(tagName);
+          filterTag.appendChild(countBadge);
+
+          filterTag.addEventListener("click", () => {
+            toggleFilterTag(tag.tag);
+          });
+
+          filterContainer.appendChild(filterTag);
+        });
+      }
+
+      // Toggle filter tag
+      function toggleFilterTag(tag) {
+        if (activeFilterTags.includes(tag)) {
+          activeFilterTags = activeFilterTags.filter((t) => t !== tag);
+        } else {
+          activeFilterTags.push(tag);
+        }
+
+        // Update UI
+        document.querySelectorAll(".filter-tag").forEach((el) => {
+          if (el.querySelector("span").textContent === tag) {
+            el.classList.toggle("active");
+          }
+        });
+
+        // Filter elements
+        filterElements();
+      }
+
+      // Filter elements based on active filter tags and search query
+      function filterElements() {
+        const searchQuery = document
+          .getElementById("search-input")
+          .value.toLowerCase();
+
+        // Filter elements based on tags and search query
+        let filteredElements = allElements;
+
+        if (activeFilterTags.length > 0) {
+          filteredElements = filteredElements.filter((element) => {
+            return activeFilterTags.every((tag) => element.tags.includes(tag));
+          });
+        }
+
+        if (searchQuery) {
+          filteredElements = filteredElements.filter((element) => {
+            return (
+              element.nodeName.toLowerCase().includes(searchQuery) ||
+              (element.sourceUrl &&
+                element.sourceUrl.toLowerCase().includes(searchQuery)) ||
+              element.tags.some((tag) =>
+                tag.toLowerCase().includes(searchQuery)
+              ) ||
+              (element.notes &&
+                element.notes.toLowerCase().includes(searchQuery))
+            );
+          });
+        }
+
+        // Render filtered elements
+        renderElementsList(filteredElements);
+
+        // Update search status
+        updateSearchStatus(filteredElements.length);
+      }
+
+      // Update search status
+      function updateSearchStatus(count) {
+        const searchStatus = document.getElementById("search-status");
+
+        if (activeFilterTags.length > 0) {
+          const tagNames = activeFilterTags.join('", "');
+          searchStatus.textContent = `Showing ${count} Asterisks including "${tagNames}"`;
+        } else {
+          searchStatus.textContent = `Showing all Asterisks`;
+        }
+      }
+
+      // Render elements list in search tab
+      // Render elements list in search tab
+      function renderElementsList(filteredElements = null) {
+        const elements = filteredElements || allElements;
+        const elementsList = document.getElementById("asterisk-list");
+
+        // Clear existing list
+        elementsList.innerHTML = "";
+
+        // Create elements list items
+        elements.forEach((element) => {
+          const listItem = document.createElement("div");
+          listItem.className = "asterisk-item";
+
+          // Element content
+          const content = document.createElement("div");
+          content.className = "asterisk-content";
+
+          const name = document.createElement("div");
+          name.className = "asterisk-name";
+          name.textContent = element.nodeName;
+
+          const meta = document.createElement("div");
+          meta.className = "asterisk-meta";
+          meta.textContent =
+            element.notes?.substring(0, 60) || element.sourceUrl || "";
+
+          const tags = document.createElement("div");
+          tags.className = "asterisk-tags";
+
+          // Add up to 3 tags
+          element.tags.slice(0, 3).forEach((tag) => {
+            const tagElement = document.createElement("span");
+            tagElement.className = "asterisk-tag";
+            tagElement.textContent = tag;
+            tags.appendChild(tagElement);
+          });
+
+          if (element.tags.length > 3) {
+            const moreTag = document.createElement("span");
+            moreTag.className = "asterisk-tag";
+            moreTag.textContent = `+${element.tags.length - 3}`;
+            tags.appendChild(moreTag);
+          }
+
+          content.appendChild(name);
+          content.appendChild(meta);
+          content.appendChild(tags);
+
+          // Action buttons container
+          const actionButtons = document.createElement("div");
+          actionButtons.className = "action-buttons-container";
+
+          // Edit button (opens Add Asterisk tab)
+          const editButton = document.createElement("button");
+          editButton.className = "icon-btn tooltip tooltip-left";
+          editButton.setAttribute("data-tooltip", "Open Asterisk");
+          editButton.innerHTML =
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+
+          editButton.addEventListener("click", (e) => {
+            e.stopPropagation(); // Prevent triggering the parent click
+            openEditAsterisk(element.nodeId);
+          });
+
+          // Go to layer button
+          const goToButton = document.createElement("button");
+          goToButton.className = "icon-btn tooltip tooltip-right";
+          goToButton.setAttribute("data-tooltip", "Go to layer");
+          goToButton.innerHTML =
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"></path></svg>';
+
+          goToButton.addEventListener("click", (e) => {
+            e.stopPropagation(); // Prevent triggering the parent click
+            navigateToElement(element.nodeId);
+          });
+
+          actionButtons.appendChild(editButton);
+          actionButtons.appendChild(goToButton);
+
+          // Add event listener to the whole item to select it
+          listItem.addEventListener("click", () => {
+            navigateToElement(element.nodeId);
+          });
+
+          listItem.appendChild(content);
+          listItem.appendChild(actionButtons);
+          elementsList.appendChild(listItem);
+        });
+
+        // Set up search functionality
+        setupSearch();
+      }
+
+      // Function to open element in Edit tab
+      function openEditAsterisk(nodeId) {
+        // Switch to Add Asterisk tab
+        switchTab("add");
+
+        // Request the element metadata
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: "edit-element",
+              nodeId: nodeId,
+            },
+          },
+          "*"
+        );
+      }
+
+      // Setup search functionality
+      function setupSearch() {
+        const searchInput = document.getElementById("search-input");
+
+        // Only add event listener if it doesn't already have one
+        if (!searchInput.hasSearchListener) {
+          searchInput.addEventListener("input", filterElements);
+          searchInput.hasSearchListener = true;
+        }
+      }
+
+      // Navigate to element in Figma
+      function navigateToElement(nodeId) {
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: "navigate-to-node",
+              nodeId,
+            },
+          },
+          "*"
+        );
+      }
+
+      // Toggle empty search state
+      function toggleEmptySearch() {
+        const emptyState = document.getElementById("empty-search");
+        const searchContent = document.getElementById("search-content");
+
+        if (allElements.length === 0) {
+          emptyState.style.display = "flex";
+          searchContent.style.display = "none";
+        } else {
+          emptyState.style.display = "none";
+          searchContent.style.display = "block";
+        }
+      }
+
+      // Resize functionality
+      const resizeHandle = document.getElementById("resize-handle");
+      let isResizing = false;
+      let startWidth, startHeight;
+
+      const startResize = (e) => {
+        isResizing = true;
+        startWidth = window.innerWidth;
+        startHeight = window.innerHeight;
+        document.addEventListener("mousemove", resize);
+        document.addEventListener("mouseup", stopResize);
+        e.preventDefault();
+      };
+
+      const resize = (e) => {
+        if (!isResizing) return;
+
+        const newWidth = startWidth + (e.clientX - startWidth);
+        const newHeight = startHeight + (e.clientY - startHeight);
+
+        // Minimum size constraints
+        const width = Math.max(280, newWidth);
+        const height = Math.max(300, newHeight);
+
+        // Tell the plugin to resize
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: "resize",
+              width,
+              height,
+            },
+          },
+          "*"
+        );
+      };
+
+      const stopResize = () => {
+        isResizing = false;
+        document.removeEventListener("mousemove", resize);
+        document.removeEventListener("mouseup", stopResize);
+      };
+
+      resizeHandle.addEventListener("mousedown", startResize);
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
