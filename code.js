@@ -204,7 +204,7 @@ figma.ui.onmessage = async (msg) => {
   // Handle resize requests from the UI
   if (msg.type === "resize") {
     figma.ui.resize(
-      Math.max(280, Math.min(800, msg.width)),
+      Math.max(350, Math.min(800, msg.width)),
       Math.max(500, Math.min(800, msg.height))
     );
   }

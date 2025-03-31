@@ -53,14 +53,18 @@
       :root {
         /* Core colors */
         --green-500: #60a5a9;
-        --green-600: #4d8a8d;
+        --green-600: #759481;
         --green-700: #3a6f72;
+        --green-750: #5f6862;
         --overlay-hover: rgba(0, 0, 0, 0.05);
 
         /* Light theme */
-        --bg-color: #ffffff;
-        --bg-secondary: #f7f8f8;
-        --card-bg: #f5f5f5;
+        /* --bg-color: #ffffff; */
+        --bg-color: #f4f7f4;
+        /* --bg-secondary: #f7f8f8; */
+        --bg-secondary: #e8eee9;
+        /* --card-bg: #f5f5f5; */
+        --card-bg: #f4f7f4;
         --text-color: #2c3436;
         --text-secondary: #6b7780;
         --text-placeholder: #a1a9b3;
@@ -71,16 +75,21 @@
         --primary-hover: var(--green-700);
         --primary-bg: var(--green-500);
         --primary-bg-hover: var(--green-600);
-        --tag-bg: #e7f2f2;
-        --tag-color: var(--green-700);
-        --tag-border: #d5e6e7;
+        /* --tag-bg: #e7f2f2; */
+        /* --tag-color: var(--green-700); */
+        /* --tag-border: #d5e6e7; */
+        --tag-bg: var(#e8eee9);
         --input-bg: #ffffff;
         --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
         --shadow-md: 0 2px 4px rgba(16, 24, 40, 0.05);
         --shadow-lg: 0 4px 8px rgba(16, 24, 40, 0.05);
-        --radius-sm: 4px;
+        /* --radius-sm: 4px;
         --radius-md: 6px;
-        --radius-lg: 8px;
+        --radius-lg: 8px; */
+        --radius-sm: 0px;
+        --radius-md: 0px;
+        --radius-lg: 0px;
+
         --radius-full: 9999px;
       }
 
@@ -113,6 +122,9 @@
         box-sizing: border-box;
         transition: background-color 0.2s, color 0.2s, border-color 0.2s,
           opacity 0.2s, transform 0.2s;
+        transition: background-color 0.1s, color 0.1s, border-color 0.2s,
+          opacity 0.2s, transform 0.2s;
+        transition-timing-function: ease;
         margin: 0;
         padding: 0;
       }
@@ -153,7 +165,10 @@
         align-items: center;
         justify-content: space-between;
         padding: 12px 16px;
-        border-bottom: 1px solid var(--border-color);
+        padding-left: 10px;
+        padding-bottom: 0;
+        border-bottom: 1.5px solid var(--border-color);
+        /* border-bottom: 1px solid var(--primary-color); */
         background-color: var(--bg-color);
       }
 
@@ -185,33 +200,41 @@
 
       .tabs {
         display: flex;
-        gap: 16px;
+        gap: 6px;
         margin-left: 4px;
       }
 
       .tab {
         position: relative;
-        padding: 8px 4px;
+        padding: 9px 15px;
         color: var(--text-secondary);
+        background-color: var(--bg-secondary);
+
         cursor: pointer;
         font-weight: 500;
+        letter-spacing: 0.1px;
         font-size: 14px;
-        background: transparent;
+        /* background: transparent; */
         border: none;
         display: flex;
         align-items: center;
         gap: 6px;
+        border-top-left-radius: 14px;
+        border-top-right-radius: 14px;
+        /* margin-bottom: -16px; */
       }
 
       .tab:hover {
         color: var(--text-color);
+        background-color: var(--bg-secondary);
       }
 
       .tab.active {
-        color: var(--primary-color);
+        color: var(--bg-secondary);
+        background-color: var(--primary-color);
       }
 
-      .tab.active::after {
+      /* .tab.active::after {
         content: "";
         position: absolute;
         bottom: -13px;
@@ -219,7 +242,7 @@
         right: 0;
         height: 2px;
         background-color: var(--primary-color);
-      }
+      } */
 
       .tab svg {
         width: 16px;
@@ -273,7 +296,7 @@
         justify-content: center;
         gap: 8px;
         padding: 10px 16px;
-        background-color: var(--primary-bg);
+        background-color: var(--green-600);
         color: white;
         border: none;
         border-radius: var(--radius-md);
@@ -284,9 +307,9 @@
         width: 100%;
       }
 
-      .primary-btn:hover {
+      /* .primary-btn:hover {
         background-color: var(--primary-bg-hover);
-      }
+      } */
 
       .primary-btn:active {
         transform: translateY(1px);
@@ -301,13 +324,16 @@
       /* Layer Info */
       .layer-info {
         display: flex;
+        position: relative;
         align-items: center;
         gap: 12px;
-        padding: 12px;
-        background-color: var(--card-bg);
+        padding: 8px;
+        padding-left: 12px;
+        background-color: var(--bg-secondary);
         border-radius: var(--radius-md);
         margin-bottom: 8px;
-        border: 1px solid var(--border-color);
+        /* border: 1px solid var(--border-color); */
+        border-left: 3px solid var(--green-600);
       }
 
       .layer-icon {
@@ -328,11 +354,13 @@
       }
 
       .layer-name {
-        font-weight: 600;
+        font-weight: 400;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         color: var(--text-color);
+        font-size: 1.1rem;
+        line-height: 111%;
       }
 
       .layer-type {
@@ -340,9 +368,15 @@
         font-size: 12px;
       }
 
+      .layer-details-icon {
+        position: absolute;
+        top: 8px;
+        right: -3px;
+      }
+
       /* Form Styles */
       .form-group {
-        margin-bottom: 16px;
+        margin-bottom: 14px;
       }
 
       .form-label {
@@ -450,11 +484,12 @@
         gap: 6px;
         padding: 4px 8px 4px 10px;
         background-color: var(--tag-bg);
+        background-color: #e8eee9;
         border: 1px solid var(--tag-border);
         border-radius: var(--radius-full);
         color: var(--tag-color);
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 400;
       }
 
       .tag-remove {
@@ -542,14 +577,25 @@
 
       .filter-tag:hover {
         background-color: var(--tag-bg);
+        background-color: #759481;
+        background-color: #759481aa;
         border-color: var(--tag-border);
         color: var(--tag-color);
+        color: #e8eee9;
+      }
+
+      .filter-tag:hover .filter-count {
+        color: #e8eee9;
       }
 
       .filter-tag.active {
-        background-color: var(--tag-bg);
+        /* background-color: var(--tag-bg);
         border-color: var(--tag-border);
-        color: var(--tag-color);
+        color: var(--tag-color); */
+        background-color: #759481aa;
+        background-color: var(--green-600);
+        /* border-color: var(--tag-border); */
+        color: #e8eee9;
       }
 
       /* .filter-count {
@@ -572,10 +618,15 @@
         color: var(--text-secondary);
       }
 
+      .filter-tag.active .filter-count {
+        color: #e8eee9;
+      }
+
       .search-results {
         flex: 1;
+        overflow-x: hidden;
         overflow-y: auto;
-        padding-bottom: 16px; /* Add padding at the bottom */
+        padding-bottom: 12px; /* Add padding at the bottom */
         margin-right: -4px; /* Make room for scrollbar */
         padding-right: 4px; /* Spacing */
         max-height: 70%;
@@ -583,7 +634,8 @@
 
       /* Search results */
       .search-status {
-        margin: 12px 0;
+        margin-top: 16px;
+        margin-bottom: 6px;
         color: var(--text-secondary);
         font-size: 13px;
         font-weight: 500;
@@ -592,16 +644,20 @@
       .asterisk-list {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        /* gap: 8px; */
       }
 
       .asterisk-item {
         display: flex;
         align-items: center;
-        padding: 10px 12px;
+        padding: 8px 12px;
+        padding-left: 4px;
+        padding-right: 6px;
         background-color: var(--card-bg);
         border-radius: var(--radius-md);
         border: 1px solid var(--border-color);
+        border-left: none;
+        border-right: none;
         cursor: pointer;
       }
 
@@ -621,6 +677,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        margin-left: 6px;
       }
 
       .asterisk-meta {
@@ -629,6 +686,8 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        margin-left: 6px;
+        margin-top: -2px;
       }
 
       /* Asterisk tags */
@@ -637,15 +696,19 @@
         flex-wrap: wrap;
         gap: 4px;
         margin-top: 4px;
+        margin-left: 2px;
       }
 
       .asterisk-tag {
         padding: 2px 6px;
         background-color: var(--tag-bg);
+        background-color: var(--card-bg);
         border-radius: var(--radius-full);
         color: var(--tag-color);
+        color: var(--green-750);
         font-size: 11px;
         font-weight: 500;
+        letter-spacing: 0.3px;
       }
 
       .asterisk-goto {
@@ -696,14 +759,14 @@
 
       /* Select Layer State */
       .select-layer {
-        padding: 14px;
+        padding: 12px 8px;
         background-color: var(--bg-secondary);
         border: 1px solid var(--border-color);
         border-radius: var(--radius-md);
         color: var(--text-secondary);
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         margin-bottom: 8px;
       }
 
@@ -1005,7 +1068,7 @@
 
       .action-buttons-container {
         display: flex;
-        gap: 4px;
+        gap: 0px;
       }
 
       .asterisk-item:hover .action-buttons-container {
@@ -1101,7 +1164,7 @@
       <div id="add-tab-content" class="content">
         <!-- Layer Info (shown when a layer is selected) -->
         <div id="layer-info" class="layer-info" style="display: none">
-          <div class="layer-icon">
+          <!-- <div class="layer-icon">
             <svg
               width="16"
               height="16"
@@ -1116,17 +1179,31 @@
                 points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
               ></polygon>
             </svg>
-          </div>
+          </div> -->
           <div class="layer-details">
-            <div id="layer-name" class="layer-name">Layer name</div>
             <div class="layer-type">Selected layer</div>
+            <div id="layer-name" class="layer-name">Layer name</div>
           </div>
+          <span class="layer-details-icon">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z"
+                fill="#F4F7F4"
+              />
+            </svg>
+          </span>
         </div>
 
         <!-- Select Layer State (shown when no layer is selected) -->
         <div id="select-layer" class="select-layer">
           <div class="select-layer-icon">
-            <svg
+            <!-- <svg
               width="18"
               height="18"
               viewBox="0 0 24 24"
@@ -1139,10 +1216,33 @@
               <polygon
                 points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
               ></polygon>
-            </svg>
+            </svg> -->
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_38_125)">
+                <path
+                  d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z"
+                  fill="#759481"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_38_125">
+                  <rect width="20" height="20" fill="white" />
+                </clipPath>
+              </defs></svg
+            >
           </div>
-          <div class="select-layer-text">
+          <!-- <div class="select-layer-text">
             Click on an element to add or edit its note
+          </div> -->
+          <div class="layer-details">
+            <div class="layer-type">Select layer</div>
+            <div class="layer-name select-layer-text">Click on an element to add or edit its note</div>
           </div>
         </div>
 
@@ -1968,21 +2068,28 @@
         // Set new timer to save after a short delay
         autosaveTimer = setTimeout(() => {
           // Get values from form
-          const sourceUrl = document.getElementById("source-url").value;
-          const notes = document.getElementById("notes").value;
+          const sourceUrl = document.getElementById("source-url").value.trim();
+          const notes = document.getElementById("notes").value.trim();
 
-          // Save directly instead of as draft
-          parent.postMessage(
-            {
-              pluginMessage: {
-                type: "save-metadata", // Changed from save-draft to save-metadata
-                sourceUrl,
-                tags: currentTags,
-                notes,
+          // Check if there's any content to save
+          const hasTags = currentTags.length > 0;
+          const hasContent = sourceUrl !== "" || notes !== "" || hasTags;
+
+          // Only save if there's actual content
+          if (hasContent) {
+            // Save directly instead of as draft
+            parent.postMessage(
+              {
+                pluginMessage: {
+                  type: "save-metadata", // or save-draft if you kept draft functionality
+                  sourceUrl,
+                  tags: currentTags,
+                  notes,
+                },
               },
-            },
-            "*"
-          );
+              "*"
+            );
+          }
         }, 1000); // 1 second delay
       }
 
@@ -2157,7 +2264,7 @@
           editButton.setAttribute("data-tooltip", "Open Asterisk");
           editButton.innerHTML =
             // '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
-            '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_38_125)"> <path d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z" fill="#759481"/></g><defs><clipPath id="clip0_38_125"><rect width="20" height="20" fill="white"/></clipPath></defs></svg>';
+            '<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_38_125)"> <path d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z" fill="#759481"/></g><defs><clipPath id="clip0_38_125"><rect width="20" height="20" fill="white"/></clipPath></defs></svg>';
 
           editButton.addEventListener("click", (e) => {
             e.stopPropagation(); // Prevent triggering the parent click
@@ -2169,8 +2276,8 @@
           goToButton.className = "icon-btn tooltip tooltip-right";
           goToButton.setAttribute("data-tooltip", "Go to layer");
           goToButton.innerHTML =
-            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"></path></svg>';
-
+            // '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"></path></svg>';
+            '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L20 9L12 15C12 14.1 12 12.2 12 11.2727C8.88642 10.8644 5.70793 10.6258 3.07089 12.6385C2.96589 12.7278 2.86089 12.8171 2.75271 12.9091C2.51083 13.1116 2.51083 13.1116 2.26407 13.3182C1.47998 14 0.590213 15.8757 0.207254 17.4545C0.147254 17.4545 0.0872543 17.4545 0.0254361 17.4545C-0.122715 14.9401 0.354838 12.8414 2.02544 10.9091C4.65424 8.00332 8.23599 6.94357 12 6.54545C12 6.54545 12 3.90909 12 3Z" fill="#759481"/><path d="M0.661749 13.0909C1.02539 13.6364 0.934498 13.6364 1.11632 14C1.29632 14 1.47632 14 1.66177 14C1.58724 14.1427 1.51271 14.2855 1.43592 14.4325C0.925534 15.4277 0.389107 16.6364 0.116379 17.9091C0.0563795 17.9091 0.0254489 17.5455 0.0254489 17.5455C-0.0413536 15.9892 0.163608 14.5705 0.661749 13.0909Z" fill="#759481"/></svg>';
           goToButton.addEventListener("click", (e) => {
             e.stopPropagation(); // Prevent triggering the parent click
             navigateToElement(element.nodeId);
@@ -2269,7 +2376,7 @@
         const newHeight = startHeight + (e.clientY - startHeight);
 
         // Minimum size constraints
-        const width = Math.max(280, newWidth);
+        const width = Math.max(350, newWidth);
         const height = Math.max(500, newHeight);
 
         // Tell the plugin to resize
