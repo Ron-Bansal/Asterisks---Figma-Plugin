@@ -7,1078 +7,1311 @@
       rel="stylesheet"
     />
     <style>
-      /* Settings Panel */
-      .settings-panel {
-        position: absolute;
-        top: 52px;
-        right: 16px;
-        background-color: var(--bg-color);
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--border-color);
-        width: 260px;
-        padding: 16px;
-        z-index: 100;
-        animation: fadeIn 0.2s;
-        display: none;
-      }
-
-      .settings-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 16px;
-      }
-
-      .settings-title {
-        font-weight: 600;
-        font-size: 15px;
-      }
-
-      .settings-option {
-        margin-bottom: 16px;
-      }
-
-      .settings-option:last-child {
-        margin-bottom: 0;
-      }
-
-      .settings-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        font-size: 13px;
-        color: var(--text-color);
-      } /* Modern Design System Variables */
-      :root {
-        /* Core colors */
-        --green-500: #60a5a9;
-        --green-600: #759481;
-        --green-700: #3a6f72;
-        --green-750: #5f6862;
-        --overlay-hover: rgba(0, 0, 0, 0.05);
-
-        /* Light theme */
-        /* --bg-color: #ffffff; */
-        --bg-color: #f4f7f4;
-        /* --bg-secondary: #f7f8f8; */
-        --bg-secondary: #e8eee9;
-        /* --card-bg: #f5f5f5; */
-        --card-bg: #f4f7f4;
-        --text-color: #2c3436;
-        --text-secondary: #6b7780;
-        --text-placeholder: #a1a9b3;
-        --text-disabled: #c4c9ce;
-        --border-color: #e1e6e9;
-        --border-hover: #d1d6d9;
-        --primary-color: var(--green-600);
-        --primary-hover: var(--green-700);
-        --primary-bg: var(--green-500);
-        --primary-bg-hover: var(--green-600);
-        /* --tag-bg: #e7f2f2; */
-        /* --tag-color: var(--green-700); */
-        /* --tag-border: #d5e6e7; */
-        --tag-bg: var(#e8eee9);
-        --input-bg: #ffffff;
-        --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
-        --shadow-md: 0 2px 4px rgba(16, 24, 40, 0.05);
-        --shadow-lg: 0 4px 8px rgba(16, 24, 40, 0.05);
-        /* --radius-sm: 4px;
-        --radius-md: 6px;
-        --radius-lg: 8px; */
-        --radius-sm: 0px;
-        --radius-md: 0px;
-        --radius-lg: 0px;
-
-        --radius-full: 9999px;
-      }
-
-      /* Dark theme */
-      .dark-theme {
-        --bg-color: #0a0d10;
-        --bg-secondary: #13171b;
-        --card-bg: #1c2126;
-        --text-color: #ffffff;
-        --text-secondary: #adb5bd;
-        --text-placeholder: #6c757d;
-        --text-disabled: #495057;
-        --border-color: #2a2f34;
-        --border-hover: #3a3f44;
-        --primary-color: var(--green-500);
-        --primary-hover: var(--green-600);
-        --primary-bg: var(--green-600);
-        --primary-bg-hover: var(--green-700);
-        --tag-bg: #2c3f40;
-        --tag-color: #a7cfd1;
-        --tag-border: #3e5859;
-        --input-bg: #13171b;
-        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3);
-        --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.3);
-      }
-
-      /* Base Styles */
-      * {
-        box-sizing: border-box;
-        transition: background-color 0.2s, color 0.2s, border-color 0.2s,
-          opacity 0.2s, transform 0.2s;
-        transition: background-color 0.1s, color 0.1s, border-color 0.2s,
-          opacity 0.2s, transform 0.2s;
-        transition-timing-function: ease;
-        margin: 0;
-        padding: 0;
-      }
-
-      html,
-      body {
-        height: 100%;
-      }
-
-      body {
-        font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI",
-          Roboto, sans-serif;
-        margin: 0;
-        padding: 0;
-        color: var(--text-color);
-        background-color: var(--bg-color);
-        font-size: 14px;
-        line-height: 1.5;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-
-      /* Main Container */
-      .container {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        overflow: hidden;
-      }
-
-      /* Header Styles */
-      .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 12px 16px;
-        padding-left: 10px;
-        padding-bottom: 0;
-        border-bottom: 1.5px solid var(--border-color);
-        /* border-bottom: 1px solid var(--primary-color); */
-        background-color: var(--bg-color);
-      }
-
-      .header-left {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .header-title {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 600;
-        color: var(--text-color);
-        font-size: 16px;
-      }
-
-      .logo-icon {
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--primary-color);
-        color: white;
-        border-radius: var(--radius-sm);
-      }
-
-      .tabs {
-        display: flex;
-        gap: 6px;
-        margin-left: 4px;
-      }
-
-      .tab {
-        position: relative;
-        padding: 9px 15px;
-        color: var(--text-secondary);
-        background-color: var(--bg-secondary);
-
-        cursor: pointer;
-        font-weight: 500;
-        letter-spacing: 0.1px;
-        font-size: 14px;
-        /* background: transparent; */
-        border: none;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        border-top-left-radius: 14px;
-        border-top-right-radius: 14px;
-        /* margin-bottom: -16px; */
-      }
-
-      .tab:hover {
-        color: var(--text-color);
-        background-color: var(--bg-secondary);
-      }
-
-      .tab.active {
-        color: var(--bg-secondary);
-        background-color: var(--primary-color);
-      }
-
-      /* .tab.active::after {
-        content: "";
-        position: absolute;
-        bottom: -13px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background-color: var(--primary-color);
-      } */
-
-      .tab svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .header-right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      /* Content Area */
-      .content {
-        flex: 1;
-        overflow-y: auto;
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      /* Button Styles */
-      .icon-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: var(--radius-md);
-        background-color: transparent;
-        color: var(--text-secondary);
-        border: none;
-        cursor: pointer;
-      }
-
-      .icon-btn:hover {
-        background-color: var(--overlay-hover);
-        color: var(--text-color);
-      }
-
-      .icon-btn svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      /* Primary button */
-      .primary-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 10px 16px;
-        background-color: var(--green-600);
-        color: white;
-        border: none;
-        border-radius: var(--radius-md);
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background-color 0.2s, transform 0.1s;
-        width: 100%;
-      }
-
-      /* .primary-btn:hover {
-        background-color: var(--primary-bg-hover);
-      } */
-
-      .primary-btn:active {
-        transform: translateY(1px);
-      }
-
-      .primary-btn:disabled {
-        background-color: var(--card-bg);
-        color: var(--text-disabled);
-        cursor: not-allowed;
-      }
-
-      /* Layer Info */
-      .layer-info {
-        display: flex;
-        position: relative;
-        align-items: center;
-        gap: 12px;
-        padding: 8px;
-        padding-left: 12px;
-        background-color: var(--bg-secondary);
-        border-radius: var(--radius-md);
-        margin-bottom: 8px;
-        /* border: 1px solid var(--border-color); */
-        border-left: 3px solid var(--green-600);
-      }
-
-      .layer-icon {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--primary-color);
-        color: white;
-        border-radius: var(--radius-sm);
-        flex-shrink: 0;
-      }
-
-      .layer-details {
-        flex: 1;
-        overflow: hidden;
-      }
-
-      .layer-name {
-        font-weight: 400;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: var(--text-color);
-        font-size: 1.1rem;
-        line-height: 111%;
-      }
-
-      .layer-type {
-        color: var(--text-secondary);
-        font-size: 12px;
-      }
-
-      .layer-details-icon {
-        position: absolute;
-        top: 8px;
-        right: -3px;
-      }
-
-      /* Form Styles */
-      .form-group {
-        margin-bottom: 14px;
-      }
-
-      .form-label {
-        display: block;
-        margin-bottom: 6px;
-        font-weight: 500;
-        color: var(--text-color);
-        font-size: 13px;
-      }
-
-      .input-group {
-        position: relative;
-      }
-
-      .input-field {
-        width: 100%;
-        padding: 10px 12px;
-        background-color: var(--input-bg);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-md);
-        font-size: 14px;
-        color: var(--text-color);
-        transition: border-color 0.2s;
-      }
-
-      .input-field:focus {
-        outline: none;
-        border-color: var(--primary-color);
-      }
-
-      .input-field::placeholder {
-        color: var(--text-placeholder);
-      }
-
-      /* Search Input */
-      .input-with-icon {
-        padding-left: 36px;
-      }
-
-      .input-icon {
-        position: absolute;
-        top: 50%;
-        left: 12px;
-        transform: translateY(-50%);
-        color: var(--text-secondary);
-        pointer-events: none;
-      }
-
-      .input-icon svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      /* Action buttons */
-      .action-buttons {
-        display: flex;
-        gap: 8px;
-        margin-top: 8px;
-      }
-
-      .action-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        padding: 6px 10px;
-        background-color: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-md);
-        color: var(--text-secondary);
-        font-size: 13px;
-        cursor: pointer;
-        font-weight: 500;
-      }
-
-      .action-btn:hover {
-        background-color: var(--overlay-hover);
-        border-color: var(--border-hover);
-        color: var(--text-color);
-      }
-
-      .action-btn svg {
-        width: 14px;
-        height: 14px;
-      }
-
-      .notes-field {
-        min-height: 80px;
-        resize: vertical;
-        font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI",
-          Roboto, sans-serif;
-      }
-
-      /* Tags */
-      .tags-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 8px;
-      }
-
-      .tag {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 8px 4px 10px;
-        background-color: var(--tag-bg);
-        background-color: #e8eee9;
-        border: 1px solid var(--tag-border);
-        border-radius: var(--radius-full);
-        color: var(--tag-color);
-        font-size: 13px;
-        font-weight: 400;
-      }
-
-      .tag-remove {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background-color: transparent;
-      }
-
-      .tag-remove:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-      }
-
-      .tag-suggestions {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        max-height: 150px;
-        overflow-y: auto;
-        background-color: var(--bg-color);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-md);
-        z-index: 10;
-        margin-top: 4px;
-        display: none;
-      }
-
-      .tag-suggestion-item {
-        padding: 8px 12px;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .tag-suggestion-item:hover {
-        background-color: var(--overlay-hover);
-      }
-
-      .tag-count {
-        font-size: 12px;
-        color: var(--text-secondary);
-        background-color: rgba(0, 0, 0, 0.05);
-        padding: 2px 6px;
-        border-radius: var(--radius-full);
-      }
-
-      /* Search Page */
-      .search-page {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        /* padding: 16px; */
-        padding: 16px 16px 0 16px; /* Remove bottom padding */
-        overflow: hidden; /* Add this */
-      }
-
-      /* Filter tags */
-      .filter-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin: 12px 0;
-      }
-
-      .filter-tag {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        padding: 4px 10px;
-        background-color: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-full);
-        color: var(--text-secondary);
-        font-size: 13px;
-        font-weight: 500;
-        cursor: pointer;
-      }
-
-      .filter-tag:hover {
-        background-color: var(--tag-bg);
-        background-color: #759481;
-        background-color: #759481aa;
-        border-color: var(--tag-border);
-        color: var(--tag-color);
-        color: #e8eee9;
-      }
-
-      .filter-tag:hover .filter-count {
-        color: #e8eee9;
-      }
-
-      .filter-tag.active {
-        /* background-color: var(--tag-bg);
-        border-color: var(--tag-border);
-        color: var(--tag-color); */
-        background-color: #759481aa;
-        background-color: var(--green-600);
-        /* border-color: var(--tag-border); */
-        color: #e8eee9;
-      }
-
-      /* .filter-count {
-        font-size: 12px;
-        background-color: rgba(0, 0, 0, 0.05);
-        padding: 1px 6px;
-        border-radius: var(--radius-full);
-        color: var(--text-secondary);
-      } */
-
-      .filter-count {
-        font-size: 10px; /* Make smaller */
-        position: relative;
-        top: -8px; /* Move up */
-        margin-left: -2px;
-        margin-bottom: -8px;
-        /* background-color: rgba(0, 0, 0, 0.05); */
-        /* padding: 1px 4px; */
-        border-radius: var(--radius-full);
-        color: var(--text-secondary);
-      }
-
-      .filter-tag.active .filter-count {
-        color: #e8eee9;
-      }
-
-      .search-results {
-        flex: 1;
-        overflow-x: hidden;
-        overflow-y: auto;
-        padding-bottom: 12px; /* Add padding at the bottom */
-        margin-right: -4px; /* Make room for scrollbar */
-        padding-right: 4px; /* Spacing */
-        max-height: 70%;
-      }
-
-      /* Search results */
-      .search-status {
-        margin-top: 16px;
-        margin-bottom: 6px;
-        color: var(--text-secondary);
-        font-size: 13px;
-        font-weight: 500;
-      }
-
-      .asterisk-list {
-        display: flex;
-        flex-direction: column;
-        /* gap: 8px; */
-      }
-
-      .asterisk-item {
-        display: flex;
-        align-items: center;
-        padding: 8px 12px;
-        padding-left: 4px;
-        padding-right: 6px;
-        background-color: var(--card-bg);
-        border-radius: var(--radius-md);
-        border: 1px solid var(--border-color);
-        border-left: none;
-        border-right: none;
-        cursor: pointer;
-      }
-
-      .asterisk-item:hover {
-        border-color: var(--border-hover);
-        background-color: var(--bg-secondary);
-      }
-
-      .asterisk-content {
-        flex: 1;
-        overflow: hidden;
-      }
-
-      .asterisk-name {
-        font-weight: 600;
-        margin-bottom: 2px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-left: 6px;
-      }
-
-      .asterisk-meta {
-        color: var(--text-secondary);
-        font-size: 12px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-left: 6px;
-        margin-top: -2px;
-      }
-
-      /* Asterisk tags */
-      .asterisk-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        margin-top: 4px;
-        margin-left: 2px;
-      }
-
-      .asterisk-tag {
-        padding: 2px 6px;
-        background-color: var(--tag-bg);
-        background-color: var(--card-bg);
-        border-radius: var(--radius-full);
-        color: var(--tag-color);
-        color: var(--green-750);
-        font-size: 11px;
-        font-weight: 500;
-        letter-spacing: 0.3px;
-      }
-
-      .asterisk-goto {
-        margin-left: 8px;
-      }
-
-      /* Empty States */
-      .empty-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 40px 16px;
-        text-align: center;
-        color: var(--text-secondary);
-        height: 100%;
-      }
-
-      .empty-state-icon {
-        margin-bottom: 16px;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--card-bg);
-        border-radius: var(--radius-md);
-        color: var(--primary-color);
-      }
-
-      .empty-state-icon svg {
-        width: 24px;
-        height: 24px;
-      }
-
-      .empty-state-title {
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: var(--text-color);
-        font-size: 15px;
-      }
-
-      .empty-state-text {
-        font-size: 14px;
-        max-width: 260px;
-        line-height: 1.5;
-      }
-
-      /* Select Layer State */
-      .select-layer {
-        padding: 12px 8px;
-        background-color: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-md);
-        color: var(--text-secondary);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-      }
-
-      .select-layer-icon {
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--primary-color);
-      }
-
-      .select-layer-text {
-        flex: 1;
-        font-size: 14px;
-      }
-
-      /* Status indicator */
-      .status-indicator {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        color: var(--text-secondary);
-        font-size: 12px;
-        margin-top: 12px;
-        font-weight: 500;
-      }
-
-      .status-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background-color: var(--primary-color);
-      }
-
-      /* Settings Panel */
-      .settings-panel {
-        position: absolute;
-        top: 52px;
-        right: 16px;
-        background-color: var(--bg-color);
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--border-color);
-        width: 260px;
-        padding: 16px;
-        z-index: 100;
-        animation: fadeIn 0.2s;
-        display: none;
-      }
-
-      .settings-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 16px;
-      }
-
-      .settings-title {
-        font-weight: 600;
-        font-size: 15px;
-      }
-
-      .settings-option {
-        margin-bottom: 16px;
-      }
-
-      .settings-option:last-child {
-        margin-bottom: 0;
-      }
-
-      .settings-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-      }
-
-      .toggle-switch {
-        position: relative;
-        display: inline-block;
-        width: 36px;
-        height: 20px;
-      }
-
-      .toggle-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-
-      .toggle-slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: var(--card-bg);
-        border: 1px solid var(--border-color);
-        transition: 0.4s;
-        border-radius: 34px;
-      }
-
-      .toggle-slider:before {
-        position: absolute;
-        content: "";
-        height: 14px;
-        width: 14px;
-        left: 2px;
-        bottom: 2px;
-        background-color: var(--text-secondary);
-        transition: 0.4s;
-        border-radius: 50%;
-      }
-
-      input:checked + .toggle-slider {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-      }
-
-      input:checked + .toggle-slider:before {
-        transform: translateX(16px);
-        background-color: white;
-      }
-
-      .toggle-group {
-        display: flex;
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-md);
-        overflow: hidden;
-      }
-
-      .toggle-option {
-        flex: 1;
-        text-align: center;
-        padding: 6px 10px;
-        font-size: 13px;
-        cursor: pointer;
-        background-color: var(--bg-color);
-        color: var(--text-secondary);
-        font-weight: 500;
-        position: relative;
-      }
-
-      .toggle-option.active {
-        background-color: var(--primary-color);
-        color: white;
-      }
-
-      /* Notification */
-      .notification {
-        position: fixed;
-        bottom: 16px;
-        left: 50%;
-        transform: translateX(-50%) translateY(100px);
-        background-color: var(--primary-color);
-        color: white;
-        padding: 10px 16px;
-        border-radius: var(--radius-full);
-        font-size: 13px;
-        font-weight: 500;
-        box-shadow: var(--shadow-md);
-        opacity: 0;
-        transition: transform 0.3s, opacity 0.3s;
-        z-index: 1000;
-      }
-
-      .notification.show {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-      }
-
-      /* Animations */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      @keyframes slideIn {
-        from {
-          transform: translateY(10px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-
-      /* Loading spinner */
-      .spinner {
-        display: inline-block;
-        width: 18px;
-        height: 18px;
-        border: 2px solid rgba(0, 0, 0, 0.1);
-        border-top-color: var(--primary-color);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .resize-handle {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 16px;
-        height: 16px;
-        cursor: nwse-resize;
-        z-index: 100;
-      }
-
-      .resize-handle::after {
-        content: "";
-        position: absolute;
-        right: 4px;
-        bottom: 4px;
+                  /* Base Styles */
+            * {
+              box-sizing: border-box;
+              transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+                opacity 0.2s, transform 0.2s;
+              transition: background-color 0.1s, color 0.1s, border-color 0.2s,
+                opacity 0.2s, transform 0.2s;
+              transition-timing-function: ease;
+              margin: 0;
+              padding: 0;
+            }
+
+            html,
+            body {
+              height: 100%;
+            }
+
+            body {
+              font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, sans-serif;
+              margin: 0;
+              padding: 0;
+              color: var(--text-color);
+              background-color: var(--bg-color);
+              font-size: 14px;
+              line-height: 1.5;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              overflow: hidden;
+              display: flex;
+              flex-direction: column;
+              height: 100%;
+            }
+
+            /* Main Container */
+            .container {
+              display: flex;
+              flex-direction: column;
+              height: 100%;
+              overflow: hidden;
+            }
+
+            /* Header Styles */
+            .header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 12px 16px;
+              padding-left: 10px;
+              padding-bottom: 0;
+              border-bottom: 1.5px solid var(--border-color);
+              background-color: var(--bg-color);
+            }
+
+            .header-left {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+            }
+
+            .header-title {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              font-weight: 600;
+              color: var(--text-color);
+              font-size: 16px;
+            }
+
+            .logo-icon {
+              width: 24px;
+              height: 24px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: var(--primary-color);
+              color: white;
+              border-radius: var(--radius-sm);
+            }
+
+            .tabs {
+              display: flex;
+              gap: 6px;
+              margin-left: 4px;
+            }
+
+            .tab {
+              position: relative;
+              padding: 9px 15px;
+              color: var(--text-secondary);
+              background-color: var(--bg-secondary);
+              cursor: pointer;
+              font-weight: 500;
+              letter-spacing: 0.1px;
+              font-size: 14px;
+              border: none;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              border-top-left-radius: 14px;
+              border-top-right-radius: 14px;
+            }
+
+            .tab:hover {
+              color: var(--text-color);
+              background-color: var(--bg-secondary);
+            }
+
+            .tab.active {
+              color: var(--bg-secondary);
+              background-color: var(--primary-color);
+            }
+
+            .tab svg {
+              width: 16px;
+              height: 16px;
+            }
+
+            .header-right {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            }
+
+            /* Content Area */
+            .content {
+              flex: 1;
+              overflow-y: auto;
+              padding: 16px;
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+            }
+
+            /* Button Styles */
+            .icon-btn {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 32px;
+              height: 32px;
+              border-radius: var(--radius-md);
+              background-color: transparent;
+              color: var(--text-secondary);
+              border: none;
+              cursor: pointer;
+            }
+
+            .icon-btn:hover {
+              background-color: var(--overlay-hover);
+              color: var(--text-color);
+            }
+
+            .icon-btn svg {
+              width: 16px;
+              height: 16px;
+            }
+
+            /* Primary button */
+            .primary-btn {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+              padding: 10px 16px;
+              background-color: var(--green-600);
+              color: white;
+              border: none;
+              border-radius: var(--radius-md);
+              font-weight: 600;
+              font-size: 14px;
+              cursor: pointer;
+              transition: background-color 0.2s, transform 0.1s;
+              width: 100%;
+            }
+
+            .primary-btn:active {
+              transform: translateY(1px);
+            }
+
+            .primary-btn:disabled {
+              background-color: var(--card-bg);
+              color: var(--text-disabled);
+              cursor: not-allowed;
+            }
+
+            /* Layer Info */
+            .layer-info {
+              display: flex;
+              position: relative;
+              align-items: center;
+              gap: 12px;
+              padding: 8px;
+              padding-left: 12px;
+              background-color: var(--bg-secondary);
+              border-radius: var(--radius-md);
+              margin-bottom: 8px;
+              border-left: 3px solid var(--green-600);
+            }
+
+            .layer-icon {
+              width: 32px;
+              height: 32px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: var(--primary-color);
+              color: white;
+              border-radius: var(--radius-sm);
+              flex-shrink: 0;
+            }
+
+            .layer-details {
+              flex: 1;
+              overflow: hidden;
+            }
+
+            .layer-name {
+              font-weight: 400;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              color: var(--text-color);
+              font-size: 15px;
+              line-height: 120%;
+            }
+
+            .layer-type {
+              color: var(--text-secondary);
+              font-size: 12px;
+            }
+
+            .layer-details-icon {
+              position: absolute;
+              top: 8px;
+              right: -3px;
+            }
+
+            /* Form Styles */
+            .form-group {
+              margin-bottom: 14px;
+            }
+
+            .form-label {
+              display: block;
+              margin-bottom: 6px;
+              font-weight: 500;
+              color: var(--text-color);
+              font-size: 13px;
+            }
+
+            .input-group {
+              position: relative;
+            }
+
+            .input-field {
+              width: 100%;
+              padding: 10px 12px;
+              background-color: var(--input-bg);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-md);
+              font-size: 14px;
+              color: var(--text-color);
+              transition: border-color 0.2s;
+            }
+
+            .input-field:focus {
+              outline: none;
+              border-color: var(--primary-color);
+            }
+
+            .input-field::placeholder {
+              color: var(--text-placeholder);
+            }
+
+            /* Search Input */
+            .input-with-icon {
+              padding-left: 36px;
+            }
+
+            .input-icon {
+              position: absolute;
+              top: 50%;
+              left: 12px;
+              transform: translateY(-50%);
+              color: var(--text-secondary);
+              pointer-events: none;
+            }
+
+            .input-icon svg {
+              width: 16px;
+              height: 16px;
+            }
+
+            /* Action buttons */
+            .action-buttons {
+              display: flex;
+              gap: 8px;
+              margin-top: 8px;
+            }
+
+            .action-btn {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              gap: 6px;
+              padding: 6px 10px;
+              background-color: var(--card-bg);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-md);
+              color: var(--text-secondary);
+              font-size: 13px;
+              cursor: pointer;
+              font-weight: 500;
+            }
+
+            .action-btn:hover {
+              background-color: var(--overlay-hover);
+              border-color: var(--border-hover);
+              color: var(--text-color);
+            }
+
+            .action-btn svg {
+              width: 14px;
+              height: 14px;
+            }
+
+            .danger-btn {
+              color: var(--danger-color);
+            }
+
+            .danger-btn:hover {
+              background-color: rgba(229, 62, 62, 0.1);
+              color: var(--danger-hover);
+            }
+
+            .notes-field {
+              min-height: 80px;
+              resize: vertical;
+              font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, sans-serif;
+            }
+
+            /* Tags */
+            .tags-container {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+              margin-top: 8px;
+            }
+
+            .tag {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              padding: 4px 8px 4px 10px;
+              background-color: var(--tag-bg);
+              background-color: #e8eee9;
+              border: 1px solid var(--tag-border);
+              border-radius: var(--radius-full);
+              color: var(--tag-color);
+              font-size: 13px;
+              font-weight: 400;
+            }
+
+            .tag-remove {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+              background-color: transparent;
+            }
+
+            .tag-remove:hover {
+              background-color: rgba(0, 0, 0, 0.1);
+            }
+
+            .tag-suggestions {
+              position: absolute;
+              top: 100%;
+              left: 0;
+              right: 0;
+              max-height: 150px;
+              overflow-y: auto;
+              background-color: var(--bg-color);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-md);
+              box-shadow: var(--shadow-md);
+              z-index: 10;
+              margin-top: 4px;
+              display: none;
+            }
+
+            .tag-suggestion-item {
+              padding: 8px 12px;
+              cursor: pointer;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+
+            .tag-suggestion-item:hover {
+              background-color: var(--overlay-hover);
+            }
+
+            .tag-count {
+              font-size: 12px;
+              color: var(--text-secondary);
+              background-color: rgba(0, 0, 0, 0.05);
+              padding: 2px 6px;
+              border-radius: var(--radius-full);
+            }
+
+            /* Search Page */
+            .search-page {
+              display: flex;
+              flex-direction: column;
+              height: 100%;
+              padding: 16px 16px 0 16px; /* Remove bottom padding */
+              overflow: hidden;
+            }
+
+            /* Filter tags */
+            .filter-tags {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+              margin: 12px 0;
+              margin-right: -4px;
+              max-height: 75px;
+              overflow-y: scroll;
+              padding: 5px 0px;
+            }
+
+            .filter-tag {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              padding: 4px 10px;
+              padding-bottom: 2px;
+              background-color: var(--card-bg);
+              background-color: var(--bg-secondary);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-full);
+              color: var(--text-secondary);
+              font-size: 13px;
+              font-weight: 500;
+              cursor: pointer;
+            }
+
+            .filter-tag:hover {
+              background-color: #759481aa;
+              color: #e8eee9;
+            }
+
+            .filter-tag:hover .filter-count {
+              color: #e8eee9;
+            }
+
+            .filter-tag.active {
+              background-color: var(--green-600);
+              color: #e8eee9;
+            }
+
+            .filter-count {
+              font-size: 10px;
+              position: relative;
+              top: -8px;
+              margin-left: -2px;
+              margin-bottom: -8px;
+              border-radius: var(--radius-full);
+              color: var(--text-secondary);
+            }
+
+            .filter-tag.active .filter-count {
+              color: #e8eee9;
+            }
+
+            .search-results {
+              flex: 1;
+              overflow-x: hidden;
+              overflow-y: auto;
+              padding-bottom: 12px;
+              margin-right: -4px;
+              padding-right: 4px;
+              max-height: 70%;
+            }
+
+            /* Search results */
+            .search-status {
+              margin-top: 16px;
+              margin-bottom: 6px;
+              color: var(--text-secondary);
+              font-size: 13px;
+              font-weight: 500;
+            }
+
+            .asterisk-list {
+              display: flex;
+              flex-direction: column;
+            }
+
+            .asterisk-item {
+              display: flex;
+              align-items: center;
+              padding: 8px 12px;
+              padding-left: 4px;
+              padding-right: 6px;
+              background-color: var(--card-bg);
+              border-radius: var(--radius-md);
+              border: 1px solid var(--border-color);
+              border-left: none;
+              border-right: none;
+              cursor: pointer;
+            }
+
+            .asterisk-item:hover {
+              border-color: var(--border-hover);
+              background-color: var(--bg-secondary);
+            }
+
+            .asterisk-content {
+              flex: 1;
+              overflow: hidden;
+            }
+
+            .asterisk-name {
+              font-weight: 600;
+              margin-bottom: 2px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              margin-left: 6px;
+            }
+
+            .asterisk-meta {
+              color: var(--text-secondary);
+              font-size: 12px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              margin-left: 6px;
+              margin-top: -2px;
+            }
+
+            /* Asterisk tags */
+            .asterisk-tags {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 4px;
+              margin-top: 4px;
+              margin-left: 2px;
+            }
+
+            .asterisk-tag {
+              padding: 2px 6px;
+              background-color: var(--card-bg);
+              border-radius: var(--radius-full);
+              color: var(--green-750);
+              font-size: 11px;
+              font-weight: 500;
+              letter-spacing: 0.3px;
+            }
+
+            .asterisk-goto {
+              margin-left: 8px;
+            }
+
+            /* Empty States */
+            .empty-state {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              padding: 40px 16px;
+              text-align: center;
+              color: var(--text-secondary);
+              height: 100%;
+            }
+
+            .empty-state-icon {
+              margin-bottom: 16px;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: var(--card-bg);
+              border-radius: var(--radius-md);
+              color: var(--primary-color);
+            }
+
+            .empty-state-icon svg {
+              width: 24px;
+              height: 24px;
+            }
+
+            .empty-state-title {
+              font-weight: 600;
+              margin-bottom: 8px;
+              color: var(--text-color);
+              font-size: 15px;
+            }
+
+            .empty-state-text {
+              font-size: 14px;
+              max-width: 260px;
+              line-height: 1.5;
+            }
+
+            /* Select Layer State */
+            .select-layer {
+              padding: 12px 8px;
+              background-color: var(--bg-secondary);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-md);
+              color: var(--text-secondary);
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              margin-bottom: 8px;
+            }
+
+            .select-layer {
+              display: flex;
+            }
+
+            .select-layer-icon {
+              width: 24px;
+              height: 24px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: var(--primary-color);
+            }
+
+            .select-layer-text-small {
+              flex: 1;
+              font-size: 12px;
+              color: var(--text-secondary);
+            }
+
+            .select-layer-text {
+              flex: 1;
+              font-size: 15px;
+              color: var(--text-color);
+              line-height: 125%;
+            }
+
+            /* Welcome content */
+            .welcome-content {
+              /* margin-top: 16px; */
+              margin-top: -10px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+              padding: 12px;
+              padding-bottom: 0;
+              opacity: 0.85;
+            }
+
+            .welcome-icon {
+              margin-bottom: 16px;
+            }
+
+            .welcome-title {
+              font-size: 18px;
+              font-weight: 600;
+              margin-bottom: 8px;
+              color: var(--text-color);
+            }
+
+            .welcome-text {
+              color: var(--text-secondary);
+              margin-bottom: 24px;
+              max-width: 280px;
+            }
+
+            .welcome-steps {
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+              margin-bottom: 24px;
+            }
+
+            .welcome-step {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              text-align: left;
+            }
+
+            .step-number {
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              background-color: var(--card-bg);
+              border: 1px solid var(--primary-color);
+              color: var(--primary-color);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: 600;
+              font-size: 13px;
+              flex-shrink: 0;
+            }
+
+            .step-text {
+              color: var(--text-secondary);
+              font-size: 14px;
+            }
+
+            .welcome-tip {
+              display: flex;
+              align-items: flex-start;
+              gap: 8px;
+              padding: 12px;
+              background-color: var(--card-bg);
+              border-radius: var(--radius-md);
+              margin-top: 8px;
+              max-width: 300px;
+            }
+
+            .tip-icon {
+              color: var(--primary-color);
+              margin-top: 2px;
+            }
+
+            .tip-text {
+              color: var(--text-secondary);
+              font-size: 13px;
+              text-align: left;
+              line-height: 1.4;
+            }
+
+            /* Status indicator */
+            .status-indicator {
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 6px;
+              color: var(--text-secondary);
+              font-size: 12px;
+              font-weight: 500;
+            }
+
+            .status-dot {
+              width: 6px;
+              height: 6px;
+              border-radius: 50%;
+              background-color: var(--primary-color);
+            }
+
+            /* Form Actions */
+            .form-actions {
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+              margin-top: 20px;
+            }
+
+            .primary-action-row {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              width: 100%;
+            }
+
+            .primary-btn {
+              flex: 1; /* Take up remaining space */
+              margin-left: 10px;
+            }
+
+            .secondary-actions {
+              display: flex;
+              gap: 8px;
+              justify-content: center;
+            }
+
+            /* Settings Panel */
+            .settings-panel {
+              position: absolute;
+              top: 52px;
+              right: 5px;
+              background-color: var(--bg-color);
+              border-radius: var(--radius-md);
+              box-shadow: var(--shadow-lg);
+              border: 1px solid var(--border-color);
+              width: 260px;
+              max-height: calc(100vh - 80px);
+              overflow-y: auto;
+              z-index: 100;
+              animation: fadeIn 0.2s;
+              display: none;
+            }
+
+            .settings-panel-content {
+              padding: 12px;
+            }
+
+            .settings-header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 3px;
+              position: sticky;
+              top: 0;
+              background-color: var(--bg-color);
+              padding: 16px 16px 8px 16px;
+              border-bottom: 1px solid var(--border-color);
+              z-index: 1;
+            }
+
+            .settings-title {
+              font-weight: 600;
+              font-size: 15px;
+            }
+
+            .settings-option {
+              margin-bottom: 16px;
+            }
+
+            .settings-option:last-child {
+              margin-bottom: 0;
+            }
+
+            .settings-label {
+              display: block;
+              margin-bottom: 8px;
+              font-weight: 500;
+              font-size: 13px;
+              color: var(--text-color);
+            }
+
+            .toggle-switch {
+              position: relative;
+              display: inline-block;
+              width: 36px;
+              height: 20px;
+            }
+
+            .toggle-switch input {
+              opacity: 0;
+              width: 0;
+              height: 0;
+            }
+
+            .toggle-slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: var(--card-bg);
+              border: 1px solid var(--border-color);
+              transition: 0.4s;
+              border-radius: 34px;
+            }
+
+            .toggle-slider:before {
+              position: absolute;
+              content: "";
+              height: 14px;
+              width: 14px;
+              left: 2px;
+              bottom: 2px;
+              background-color: var(--text-secondary);
+              transition: 0.4s;
+              border-radius: 50%;
+            }
+
+            input:checked + .toggle-slider {
+              background-color: var(--primary-color);
+              border-color: var(--primary-color);
+            }
+
+            input:checked + .toggle-slider:before {
+              transform: translateX(16px);
+              background-color: white;
+            }
+
+            .toggle-group {
+              display: flex;
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-md);
+              overflow: hidden;
+            }
+
+            .toggle-option {
+              flex: 1;
+              text-align: center;
+              padding: 6px 10px;
+              font-size: 13px;
+              cursor: pointer;
+              background-color: var(--bg-color);
+              color: var(--text-secondary);
+              font-weight: 500;
+              position: relative;
+            }
+
+            .toggle-option.active {
+              background-color: var(--primary-color);
+              color: white;
+            }
+
+            /* Action option list for settings */
+            .action-option-list {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+              margin-top: 8px;
+            }
+
+            .action-option {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 10px 12px;
+              background-color: var(--card-bg);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-md);
+              cursor: pointer;
+              transition: all 0.2s;
+            }
+
+            .action-option:hover {
+              background-color: var(--bg-secondary);
+              border-color: var(--border-hover);
+            }
+
+            .action-option.active {
+              background-color: var(--bg-secondary);
+              border-color: var(--primary-color);
+            }
+
+            .action-option-icon {
+              width: 32px;
+              height: 32px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: var(--bg-color);
+              border-radius: var(--radius-sm);
+              color: var(--text-secondary);
+              flex-shrink: 0;
+            }
+
+            .action-option.active .action-option-icon {
+              background-color: var(--primary-color);
+              color: white;
+            }
+
+            .action-option-content {
+              flex: 1;
+            }
+
+            .action-option-title {
+              font-weight: 500;
+              font-size: 14px;
+              color: var(--text-color);
+              margin-bottom: 2px;
+            }
+
+            .action-option-desc {
+              font-size: 12px;
+              color: var(--text-secondary);
+            }
+
+            .action-option-check {
+              color: var(--primary-color);
+              opacity: 0;
+            }
+
+            .action-option.active .action-option-check {
+              opacity: 1;
+            }
+
+            /* Field order styling */
+            .field-order-container {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+              margin-top: 10px;
+            }
+
+            .field-order-item {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              padding: 8px 12px;
+              background-color: var(--card-bg);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-sm);
+              cursor: grab;
+            }
+
+            .field-order-item.dragging {
+              opacity: 0.6;
+              cursor: grabbing;
+            }
+
+            .drag-handle {
+              color: var(--text-secondary);
+              cursor: grab;
+              font-size: 12px;
+              padding-right: 4px;
+            }
+
+            /* Notification */
+            .notification {
+              position: fixed;
+              bottom: 16px;
+              left: 50%;
+              transform: translateX(-50%) translateY(100px);
+              padding: 10px 16px;
+              border-radius: var(--radius-full);
+              font-size: 13px;
+              font-weight: 500;
+              box-shadow: var(--shadow-md);
+              opacity: 0;
+              transition: transform 0.3s, opacity 0.3s;
+              z-index: 1000;
+              background-color: var(--primary-color);
+              color: white;
+            }
+
+            .notification.show {
+              transform: translateX(-50%) translateY(0);
+              opacity: 1;
+            }
+
+            .notification.success {
+              background-color: var(--primary-color);
+            }
+
+            .notification.warning {
+              background-color: var(--danger-color);
+            }
+
+            .notification.info {
+              background-color: #3182ce; /* Blue */
+            }
+
+            /* Tooltip styling */
+            .tooltip {
+              position: relative;
+            }
+
+            .tooltip::after {
+              content: attr(data-tooltip);
+              position: absolute;
+              top: 115%;
+              left: 50%;
+              transform: translateX(-50%);
+              padding: 4px 8px;
+              background-color: var(--text-color);
+              color: white;
+              border-radius: var(--radius-sm);
+              font-size: 12px;
+              font-weight: 500;
+              white-space: nowrap;
+              pointer-events: none;
+              opacity: 0;
+              transition: opacity 0.2s;
+              z-index: 10;
+            }
+
+            .tooltip:hover::after {
+              opacity: 1;
+            }
+
+            /* Ensure tooltip doesn't get cut off at the edge */
+            .tooltip.tooltip-left::after {
+              left: -20px;
+              transform: translateX(0);
+            }
+
+            .tooltip.tooltip-right::after {
+              left: auto;
+              right: -10px;
+              transform: translateX(0);
+            }
+
+            .action-buttons-container {
+              display: flex;
+              gap: 0px;
+            }
+
+            .asterisk-item:hover .action-buttons-container {
+              opacity: 1;
+            }
+
+            .asterisk-item .action-buttons-container {
+              opacity: 0.6;
+              transition: opacity 0.2s;
+            }
+
+            .go-to-wrapper {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+            }
+
+            .go-to-text {
+              opacity: 0;
+              max-width: 0;
+              overflow: hidden;
+              white-space: nowrap;
+              font-size: 13px;
+              font-weight: 500;
+              color: var(--text-secondary);
+              transition: opacity 0.2s ease, max-width 0.3s ease;
+            }
+
+            .asterisk-item:hover .go-to-text {
+              opacity: 1;
+              max-width: 100px;
+            }
+
+            .asterisk-goto {
+              margin-left: 0;
+            }
+
+            /* Loading spinner */
+            .spinner {
+              display: inline-block;
+              width: 18px;
+              height: 18px;
+              border: 2px solid rgba(0, 0, 0, 0.1);
+              border-top-color: var(--primary-color);
+              border-radius: 50%;
+              animation: spin 0.8s linear infinite;
+            }
+
+            /* Resize handle */
+            .resize-handle {
+              position: absolute;
+              bottom: 0;
+              right: 0;
+              width: 24px;
+              height: 24px;
+              cursor: nwse-resize;
+              z-index: 100;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              opacity: 0.4;
+              transition: opacity 0.2s;
+            }
+
+            .resize-handle:hover {
+              opacity: 0.8;
+            }
+
+            .resize-handle::before {
+              content: "";
+              width: 12px;
+              height: 12px;
+              display: block;
+              background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 1L1 11M11 5L5 11M11 9L9 11' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+              background-repeat: no-repeat;
+              background-position: center;
+            }
+
+            /* Make sure the resize handle is more visible in dark mode */
+            .dark-theme .resize-handle::before {
+              background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 1L1 11M11 5L5 11M11 9L9 11' stroke='%23aaa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            }
+
+            /* Animations */
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+              }
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes slideIn {
+              from {
+                transform: translateY(10px);
+                opacity: 0;
+              }
+              to {
+                transform: translateY(0);
+                opacity: 1;
+              }
+            }
+
+            @keyframes spin {
+              to {
+                transform: rotate(360deg);
+              }
+            }/* Modern Design System Variables */
+
+            /* Custom scrollbar styling */
+      ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
-        border-right: 2px solid var(--text-secondary);
-        border-bottom: 2px solid var(--text-secondary);
-        opacity: 0.6;
       }
 
-      .go-to-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 6px;
+      ::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 4px;
+        margin: 4px;
       }
 
-      .go-to-text {
-        opacity: 0;
-        max-width: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--text-secondary);
-        transition: opacity 0.2s ease, max-width 0.3s ease;
+      ::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
       }
 
-      .asterisk-item:hover .go-to-text {
-        opacity: 1;
-        max-width: 100px;
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-color);
       }
 
-      .asterisk-goto {
-        margin-left: 0;
+      /* For Firefox */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-color) transparent;
       }
 
-      /* Tooltip styling */
-      .tooltip {
-        position: relative;
+      /* Make scrollbars in dark mode more visible */
+      .dark-theme::-webkit-scrollbar-thumb {
+        background: var(--text-secondary);
       }
 
-      .tooltip::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        top: 115%;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 4px 8px;
-        background-color: var(--text-color);
-        color: white;
-        border-radius: var(--radius-sm);
-        font-size: 12px;
-        font-weight: 500;
-        white-space: nowrap;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.2s;
-        z-index: 10;
+      .dark-theme * {
+        scrollbar-color: var(--text-secondary) transparent;
       }
+            :root {
+              /* Core colors */
+              --green-500: #60a5a9;
+              --green-600: #759481;
+              --green-700: #3a6f72;
+              --green-750: #5f6862;
+              --overlay-hover: rgba(0, 0, 0, 0.05);
+              --danger-color: #e53e3e;
+              --danger-hover: #c53030;
 
-      .tooltip:hover::after {
-        opacity: 1;
-      }
+              /* Light theme */
+              --bg-color: #f4f7f4;
+              --bg-secondary: #e8eee9;
+              --card-bg: #f4f7f4;
+              --text-color: #2c3436;
+              --text-secondary: #6b7780;
+              --text-placeholder: #a1a9b3;
+              --text-disabled: #c4c9ce;
+              --border-color: #e1e6e9;
+              --border-hover: #d1d6d9;
+              --primary-color: var(--green-600);
+              --primary-hover: var(--green-700);
+              --primary-bg: var(--green-500);
+              --primary-bg-hover: var(--green-600);
+              --tag-bg: #e8eee9;
+              --input-bg: #ffffff;
+              --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+              --shadow-md: 0 2px 4px rgba(16, 24, 40, 0.05);
+              --shadow-lg: 0 4px 8px rgba(16, 24, 40, 0.05);
+              --radius-sm: 0px;
+              --radius-md: 0px;
+              --radius-lg: 0px;
+              --radius-full: 9999px;
+            }
 
-      /* Ensure tooltip doesn't get cut off at the edge */
-      .tooltip.tooltip-left::after {
-        left: -20px;
-        transform: translateX(0);
-      }
+            /* Dark theme */
+            .dark-theme {
+              --bg-color: #0a0d10;
+              --bg-secondary: #13171b;
+              --card-bg: #1c2126;
+              --text-color: #ffffff;
+              --text-secondary: #adb5bd;
+              --text-placeholder: #6c757d;
+              --text-disabled: #495057;
+              --border-color: #2a2f34;
+              --border-hover: #3a3f44;
+              --primary-color: var(--green-600);
+              --primary-hover: var(--green-600);
+              --primary-bg: var(--green-00);
+              --primary-bg-hover: var(--green-700);
+              --tag-bg: #2c3f40;
+              /* --tag-color: #a7cfd1; */
+              --tag-color: var(--green-600);
+              --tag-border: #3e5859;
+              --input-bg: #13171b;
+              --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+              --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3);
+              --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.3);
+              --danger-color: #fc8181;
+              --danger-hover: #f56565;
+            }
 
-      .tooltip.tooltip-right::after {
-        left: auto;
-        right: -10px;
-        transform: translateX(0);
-      }
-
-      .action-buttons-container {
-        display: flex;
-        gap: 0px;
-      }
-
-      .asterisk-item:hover .action-buttons-container {
-        opacity: 1;
-      }
-
-      .asterisk-item .action-buttons-container {
-        opacity: 0.6;
-        transition: opacity 0.2s;
-      }
+            /* Base Styles */
+            * {
+              box-sizing: border-box;
+              transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+                opacity 0.2s, transform 0.2s;
+              transition: background-color 0.1s, color 0.1s, border-
     </style>
   </head>
   <body>
@@ -1086,25 +1319,6 @@
       <!-- Header -->
       <div class="header">
         <div class="header-left">
-          <!-- <div class="header-title">
-            <div class="logo-icon">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polygon
-                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                ></polygon>
-              </svg>
-            </div>
-            <span>Asterisk</span>
-          </div> -->
           <div class="tabs">
             <button class="tab active" data-tab="add">
               <svg
@@ -1140,7 +1354,11 @@
           </div>
         </div>
         <div class="header-right">
-          <button id="settings-button" class="icon-btn">
+          <button
+            id="settings-button"
+            class="icon-btn tooltip"
+            data-tooltip="Settings"
+          >
             <svg
               width="16"
               height="16"
@@ -1164,22 +1382,6 @@
       <div id="add-tab-content" class="content">
         <!-- Layer Info (shown when a layer is selected) -->
         <div id="layer-info" class="layer-info" style="display: none">
-          <!-- <div class="layer-icon">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polygon
-                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-              ></polygon>
-            </svg>
-          </div> -->
           <div class="layer-details">
             <div class="layer-type">Selected layer</div>
             <div id="layer-name" class="layer-name">Layer name</div>
@@ -1203,20 +1405,6 @@
         <!-- Select Layer State (shown when no layer is selected) -->
         <div id="select-layer" class="select-layer">
           <div class="select-layer-icon">
-            <!-- <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polygon
-                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-              ></polygon>
-            </svg> -->
             <svg
               width="18"
               height="18"
@@ -1234,22 +1422,85 @@
                 <clipPath id="clip0_38_125">
                   <rect width="20" height="20" fill="white" />
                 </clipPath>
-              </defs></svg
-            >
+              </defs>
+            </svg>
           </div>
-          <!-- <div class="select-layer-text">
-            Click on an element to add or edit its note
-          </div> -->
           <div class="layer-details">
-            <div class="layer-type">Select layer</div>
-            <div class="layer-name select-layer-text">Click on an element to add or edit its note</div>
+            <div class="xlayer-type select-layer-text-small">Select layer</div>
+            <div class="xlayer-name select-layer-text">
+              Click on an element to add or edit its note
+            </div>
+          </div>
+        </div>
+
+        <!-- Welcome content (shown when no layer is selected) -->
+        <div id="welcome-content" class="welcome-content">
+          <div class="welcome-icon">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z"
+                fill="#759481"
+                opacity="0.4"
+              />
+            </svg>
+          </div>
+          <h3 class="welcome-title">Welcome to Asterisk</h3>
+          <p class="welcome-text">
+            Add context to your Figma elements with source links, tags, and
+            notes.
+          </p>
+
+          <div class="welcome-steps">
+            <div class="welcome-step">
+              <div class="step-number">1</div>
+              <div class="step-text">Select any layer in your design</div>
+            </div>
+            <div class="welcome-step">
+              <div class="step-number">2</div>
+              <div class="step-text">Add relevant links, tags, and notes</div>
+            </div>
+            <div class="welcome-step">
+              <div class="step-number">3</div>
+              <div class="step-text">
+                Find and filter your Asterisks in the Search tab
+              </div>
+            </div>
+          </div>
+
+          <div class="welcome-tip">
+            <div class="tip-icon">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <div class="tip-text">
+              Tip: Use tags to organize and categorize your elements for easy
+              lookup later
+            </div>
           </div>
         </div>
 
         <!-- Form Container -->
         <div id="form-container" style="display: none">
-          <!-- Source URL -->
-          <div class="form-group">
+          <!-- Form fields will be dynamically ordered based on user preferences -->
+          <div id="source-url-group" class="form-group">
             <label class="form-label">Link to source</label>
             <div class="input-group">
               <input
@@ -1315,8 +1566,7 @@
             </div>
           </div>
 
-          <!-- Tags -->
-          <div class="form-group">
+          <div id="tags-group" class="form-group">
             <label class="form-label">Add tags</label>
             <div class="input-group">
               <input
@@ -1350,8 +1600,7 @@
             <div id="tags-container" class="tags-container"></div>
           </div>
 
-          <!-- Notes -->
-          <div class="form-group">
+          <div id="notes-group" class="form-group">
             <label class="form-label">Notes</label>
             <textarea
               id="notes"
@@ -1360,35 +1609,72 @@
             ></textarea>
           </div>
 
-          <!-- Save Button -->
-          <button id="save-button" class="primary-btn">
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
-              ></path>
-              <polyline points="17 21 17 13 7 13 7 21"></polyline>
-              <polyline points="7 3 7 8 15 8"></polyline>
-            </svg>
-            Save note
-          </button>
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <div class="primary-action-row">
+              <div
+                id="status-indicator"
+                class="status-indicator"
+                style="display: none"
+              >
+                <span class="status-dot"></span>
+                <span>Auto saved</span>
+              </div>
+              <button id="save-button" class="primary-btn">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+                  ></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                Save Asterisk
+              </button>
+            </div>
 
-          <!-- Status Indicator -->
-          <div
-            id="status-indicator"
-            class="status-indicator"
-            style="display: none"
-          >
-            <span class="status-dot"></span>
-            <span>Draft auto-saved</span>
+            <div class="secondary-actions">
+              <button id="go-to-layer-button" class="action-btn">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 3L20 9L12 15C12 14.1 12 12.2 12 11.2727C8.88642 10.8644 5.70793 10.6258 3.07089 12.6385C2.96589 12.7278 2.86089 12.8171 2.75271 12.9091C2.51083 13.1116 2.51083 13.1116 2.26407 13.3182C1.47998 14 0.590213 15.8757 0.207254 17.4545C0.147254 17.4545 0.0872543 17.4545 0.0254361 17.4545C-0.122715 14.9401 0.354838 12.8414 2.02544 10.9091C4.65424 8.00332 8.23599 6.94357 12 6.54545C12 6.54545 12 3.90909 12 3Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Go to layer
+              </button>
+
+              <button id="clear-button" class="action-btn danger-btn">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                Clear
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1483,22 +1769,131 @@
           </button>
         </div>
 
-        <div class="settings-option">
-          <label class="settings-label">Theme</label>
-          <div class="toggle-group">
-            <div class="toggle-option theme-option active" data-value="light">
-              Light
+        <div class="settings-panel-content">
+          <div class="settings-option">
+            <label class="settings-label">Theme</label>
+            <div class="toggle-group">
+              <div class="toggle-option theme-option active" data-value="light">
+                Light
+              </div>
+              <div class="toggle-option theme-option" data-value="dark">
+                Dark
+              </div>
             </div>
-            <div class="toggle-option theme-option" data-value="dark">Dark</div>
           </div>
-        </div>
 
-        <div class="settings-option">
-          <label class="settings-label">Auto-save drafts</label>
-          <label class="toggle-switch">
-            <input type="checkbox" id="autosave-toggle" checked />
-            <span class="toggle-slider"></span>
-          </label>
+          <div class="settings-option">
+            <label class="settings-label">Auto-save notes</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="autosave-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="settings-option">
+            <label class="settings-label">When clicking a search result</label>
+
+            <div class="action-option-list">
+              <div
+                class="action-option search-action-option active"
+                data-value="navigate"
+              >
+                <div class="action-option-icon">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 3L20 9L12 15C12 14.1 12 12.2 12 11.2727C8.88642 10.8644 5.70793 10.6258 3.07089 12.6385C2.96589 12.7278 2.86089 12.8171 2.75271 12.9091C2.51083 13.1116 2.51083 13.1116 2.26407 13.3182C1.47998 14 0.590213 15.8757 0.207254 17.4545C0.147254 17.4545 0.0872543 17.4545 0.0254361 17.4545C-0.122715 14.9401 0.354838 12.8414 2.02544 10.9091C4.65424 8.00332 8.23599 6.94357 12 6.54545C12 6.54545 12 3.90909 12 3Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+                <div class="action-option-content">
+                  <div class="action-option-title">Navigate to layer</div>
+                  <div class="action-option-desc">
+                    Jump directly to the layer in your design
+                  </div>
+                </div>
+                <div class="action-option-check">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="action-option search-action-option" data-value="open">
+                <div class="action-option-icon">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+                <div class="action-option-content">
+                  <div class="action-option-title">Open Asterisk</div>
+                  <div class="action-option-desc">
+                    View and edit the Asterisk details
+                  </div>
+                </div>
+                <div class="action-option-check">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-option">
+            <label class="settings-label">Field order in Add/Edit</label>
+            <div class="field-order-container">
+              <div
+                class="field-order-item"
+                draggable="true"
+                data-field="sourceUrl"
+              >
+                <span class="drag-handle">⋮⋮</span>
+                <span>Source URL</span>
+              </div>
+              <div class="field-order-item" draggable="true" data-field="tags">
+                <span class="drag-handle">⋮⋮</span>
+                <span>Tags</span>
+              </div>
+              <div class="field-order-item" draggable="true" data-field="notes">
+                <span class="drag-handle">⋮⋮</span>
+                <span>Notes</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1506,7 +1901,6 @@
       <div id="notification" class="notification"></div>
       <div id="resize-handle" class="resize-handle"></div>
     </div>
-
     <script>
       // Global state
       let currentTags = [];
@@ -1515,6 +1909,8 @@
       let preferences = {
         theme: "light",
         autosave: true,
+        defaultSearchAction: "navigate", // 'navigate' or 'open'
+        fieldOrder: ["sourceUrl", "tags", "notes"], // Order of fields in add/edit
       };
       let autosaveTimer = null;
       let allTags = []; // For tag suggestions with counts
@@ -1543,11 +1939,17 @@
         // URL field handling
         setupUrlField();
 
-        // Save button
-        setupSaveButton();
+        // Form actions
+        setupFormActions();
 
         // Listen for messages from the plugin
         setupPluginMessageListener();
+
+        // Setup resize handle
+        setupResizeHandle();
+
+        // Setup keyboard shortcuts
+        setupKeyboardShortcuts();
       });
 
       // Tab switching functionality
@@ -1585,6 +1987,12 @@
             "*"
           );
           parent.postMessage({ pluginMessage: { type: "get-all-tags" } }, "*");
+
+          // Make sure the search results are displayed
+          setTimeout(() => {
+            renderElementsList();
+            toggleEmptySearch();
+          }, 100);
         }
       }
 
@@ -1633,6 +2041,25 @@
             savePreferences();
           });
 
+        // Default search action toggle
+        document.querySelectorAll(".search-action-option").forEach((option) => {
+          option.addEventListener("click", function () {
+            const action = this.dataset.value;
+
+            // Update UI
+            document
+              .querySelectorAll(".search-action-option")
+              .forEach((opt) => {
+                opt.classList.remove("active");
+              });
+            this.classList.add("active");
+
+            // Update preferences
+            preferences.defaultSearchAction = action;
+            savePreferences();
+          });
+        });
+
         // Handle clicks outside settings panel
         document.addEventListener("click", function (event) {
           const panel = document.getElementById("settings-panel");
@@ -1649,6 +2076,131 @@
         });
       }
 
+      // Field order drag and drop functionality
+      function setupFieldOrderDragAndDrop() {
+        const items = document.querySelectorAll(".field-order-item");
+        let draggedItem = null;
+
+        items.forEach((item) => {
+          // Make draggable
+          item.addEventListener("dragstart", function () {
+            draggedItem = this;
+            this.classList.add("dragging");
+          });
+
+          item.addEventListener("dragend", function () {
+            this.classList.remove("dragging");
+
+            // Save new order to preferences
+            const newOrder = Array.from(
+              document.querySelectorAll(".field-order-item")
+            )
+              .sort((a, b) => parseInt(a.style.order) - parseInt(b.style.order))
+              .map((item) => item.dataset.field);
+
+            preferences.fieldOrder = newOrder;
+            savePreferences();
+
+            // Apply the new field order to the form
+            applyFieldOrder();
+          });
+
+          item.addEventListener("dragover", function (e) {
+            e.preventDefault();
+          });
+
+          item.addEventListener("drop", function (e) {
+            e.preventDefault();
+
+            // Swap the order of the items
+            const draggedOrder = draggedItem.style.order;
+            draggedItem.style.order = this.style.order;
+            this.style.order = draggedOrder;
+          });
+        });
+      }
+
+      // Initialize field order based on preferences
+      function initializeFieldOrder() {
+        const items = document.querySelectorAll(".field-order-item");
+
+        items.forEach((item) => {
+          // Set initial order based on preferences
+          const fieldIndex = preferences.fieldOrder.indexOf(item.dataset.field);
+          item.style.order = fieldIndex + 1;
+        });
+
+        // Apply the field order to the form
+        applyFieldOrder();
+      }
+
+      // Function to apply field order to the form
+      function applyFieldOrder() {
+        const formContainer = document.getElementById("form-container");
+        if (!formContainer) return;
+
+        const sourceUrlGroup = document.getElementById("source-url-group");
+        const tagsGroup = document.getElementById("tags-group");
+        const notesGroup = document.getElementById("notes-group");
+
+        // Store references to the action buttons
+        const formActions = document.querySelector(".form-actions");
+        if (formContainer.contains(formActions)) {
+          formContainer.removeChild(formActions);
+        }
+
+        // Remove all fields
+        if (formContainer.contains(sourceUrlGroup))
+          formContainer.removeChild(sourceUrlGroup);
+        if (formContainer.contains(tagsGroup))
+          formContainer.removeChild(tagsGroup);
+        if (formContainer.contains(notesGroup))
+          formContainer.removeChild(notesGroup);
+
+        // Re-add fields in the preferred order
+        preferences.fieldOrder.forEach((field) => {
+          if (field === "sourceUrl" && sourceUrlGroup) {
+            formContainer.appendChild(sourceUrlGroup);
+          } else if (field === "tags" && tagsGroup) {
+            formContainer.appendChild(tagsGroup);
+          } else if (field === "notes" && notesGroup) {
+            formContainer.appendChild(notesGroup);
+          }
+        });
+
+        // Add the action buttons back
+        if (formActions) {
+          formContainer.appendChild(formActions);
+        }
+      }
+
+      // Update settings UI based on preferences
+      function updateSettingsUI() {
+        // Set active theme option
+        document.querySelectorAll(".theme-option").forEach((option) => {
+          option.classList.remove("active");
+          if (option.dataset.value === preferences.theme) {
+            option.classList.add("active");
+          }
+        });
+
+        // Set active search action option
+        document.querySelectorAll(".search-action-option").forEach((option) => {
+          option.classList.remove("active");
+          if (option.dataset.value === preferences.defaultSearchAction) {
+            option.classList.add("active");
+          }
+        });
+
+        // Set autosave toggle
+        document.getElementById("autosave-toggle").checked =
+          preferences.autosave;
+
+        // Apply field order
+        setupFieldOrderDragAndDrop();
+        initializeFieldOrder();
+      }
+
       // Save preferences
       function savePreferences() {
         parent.postMessage(
@@ -1660,6 +2212,30 @@
           },
           "*"
         );
+      }
+
+      // Update theme
+      function updateTheme(theme) {
+        if (theme === "dark") {
+          document.body.classList.add("dark-theme");
+        } else {
+          document.body.classList.remove("dark-theme");
+        }
+      }
+
+      // Update autosave
+      function updateAutosave() {
+        if (preferences.autosave) {
+          document.getElementById("status-indicator").style.display = "flex";
+        } else {
+          document.getElementById("status-indicator").style.display = "none";
+
+          // Clear any existing autosave timer
+          if (autosaveTimer) {
+            clearTimeout(autosaveTimer);
+            autosaveTimer = null;
+          }
+        }
       }
 
       // Tag input handling
@@ -1700,157 +2276,6 @@
               autosaveDraft();
             }
           });
-      }
-
-      // URL field handling
-      function setupUrlField() {
-        const sourceUrl = document.getElementById("source-url");
-
-        sourceUrl.addEventListener("input", function () {
-          const url = this.value.trim();
-          const openLinkBtn = document.getElementById("open-link-button");
-          const copyLinkBtn = document.getElementById("copy-link-button");
-
-          if (url) {
-            openLinkBtn.style.display = "flex";
-            copyLinkBtn.style.display = "flex";
-          } else {
-            openLinkBtn.style.display = "none";
-            copyLinkBtn.style.display = "none";
-          }
-
-          autosaveDraft();
-        });
-
-        // Open link button
-        document
-          .getElementById("open-link-button")
-          .addEventListener("click", function () {
-            const url = document.getElementById("source-url").value.trim();
-            if (url) {
-              window.open(url, "_blank");
-            }
-          });
-
-        // Copy link button
-        document
-          .getElementById("copy-link-button")
-          .addEventListener("click", function () {
-            const url = document.getElementById("source-url").value.trim();
-            if (url) {
-              navigator.clipboard.writeText(url).then(() => {
-                showNotification("URL copied to clipboard");
-              });
-            }
-          });
-
-        // Notes field
-        document.getElementById("notes").addEventListener("input", function () {
-          autosaveDraft();
-        });
-      }
-
-      // Save button functionality
-      function setupSaveButton() {
-        document
-          .getElementById("save-button")
-          .addEventListener("click", function () {
-            saveMetadata();
-          });
-      }
-
-      // Plugin message listener
-      function setupPluginMessageListener() {
-        window.onmessage = (event) => {
-          const msg = event.data.pluginMessage;
-
-          if (!msg) return;
-
-          switch (msg.type) {
-            case "init-preferences":
-              preferences = msg.preferences;
-              updateTheme(preferences.theme);
-              updateAutosave();
-              break;
-
-            case "metadata-loaded":
-              displayMetadata(msg.data);
-              updateLayerInfo(msg.nodeName, msg.nodeId);
-              showLayerSelected();
-              break;
-
-            case "draft-loaded":
-              displayMetadata(msg.data);
-              updateLayerInfo(msg.nodeName, msg.nodeId);
-              showDraftStatus();
-              showLayerSelected();
-              break;
-
-            case "new-element":
-              clearForm();
-              updateLayerInfo(msg.nodeName, msg.nodeId);
-              showLayerSelected();
-              break;
-
-            case "no-selection":
-              clearForm();
-              showSelectLayer();
-              break;
-
-            case "selection-changed":
-              parent.postMessage(
-                { pluginMessage: { type: "get-metadata" } },
-                "*"
-              );
-              break;
-
-            case "all-tags":
-              allTags = msg.tags || [];
-              updateFilterTags();
-              break;
-
-            case "all-elements":
-              allElements = msg.elements || [];
-              renderElementsList();
-              toggleEmptySearch();
-              break;
-          }
-        };
-      }
-
-      // Update theme
-      function updateTheme(theme) {
-        if (theme === "dark") {
-          document.body.classList.add("dark-theme");
-        } else {
-          document.body.classList.remove("dark-theme");
-        }
-
-        // Update settings UI
-        document.querySelectorAll(".theme-option").forEach((option) => {
-          option.classList.remove("active");
-          if (option.dataset.value === theme) {
-            option.classList.add("active");
-          }
-        });
-      }
-
-      // Update autosave
-      function updateAutosave() {
-        document.getElementById("autosave-toggle").checked =
-          preferences.autosave;
-
-        if (preferences.autosave) {
-          document.getElementById("status-indicator").style.display = "flex";
-        } else {
-          document.getElementById("status-indicator").style.display = "none";
-
-          // Clear any existing autosave timer
-          if (autosaveTimer) {
-            clearTimeout(autosaveTimer);
-            autosaveTimer = null;
-          }
-        }
       }
 
       // Show tag suggestions
@@ -1951,6 +2376,170 @@
         });
       }
 
+      // URL field handling
+      function setupUrlField() {
+        const sourceUrl = document.getElementById("source-url");
+
+        sourceUrl.addEventListener("input", function () {
+          const url = this.value.trim();
+          const openLinkBtn = document.getElementById("open-link-button");
+          const copyLinkBtn = document.getElementById("copy-link-button");
+
+          if (url) {
+            openLinkBtn.style.display = "flex";
+            copyLinkBtn.style.display = "flex";
+          } else {
+            openLinkBtn.style.display = "none";
+            copyLinkBtn.style.display = "none";
+          }
+
+          autosaveDraft();
+        });
+
+        // Open link button
+        document
+          .getElementById("open-link-button")
+          .addEventListener("click", function () {
+            const url = document.getElementById("source-url").value.trim();
+            if (url) {
+              window.open(url, "_blank");
+            }
+          });
+
+        // Copy link button
+        document
+          .getElementById("copy-link-button")
+          .addEventListener("click", function () {
+            const url = document.getElementById("source-url").value.trim();
+            if (url) {
+              navigator.clipboard.writeText(url).then(() => {
+                showNotification("URL copied to clipboard");
+              });
+            }
+          });
+
+        // Notes field
+        document.getElementById("notes").addEventListener("input", function () {
+          autosaveDraft();
+        });
+      }
+
+      // Form actions setup
+      function setupFormActions() {
+        // Save button
+        document
+          .getElementById("save-button")
+          .addEventListener("click", function () {
+            saveMetadata();
+          });
+
+        // Go to layer button
+        document
+          .getElementById("go-to-layer-button")
+          .addEventListener("click", function () {
+            if (currentNodeId) {
+              console.log("Navigating to layer:", currentNodeId);
+              navigateToElement(currentNodeId);
+            } else {
+              console.log("No node ID available for navigation");
+              showNotification("No layer selected", "info");
+            }
+          });
+
+        // Clear button
+        document
+          .getElementById("clear-button")
+          .addEventListener("click", function () {
+            if (
+              confirm(
+                "Are you sure you want to clear all content and delete this Asterisk?"
+              )
+            ) {
+              // Check if it's an existing asterisk
+              const isExisting = !!currentNodeId;
+
+              // Clear form
+              clearForm();
+
+              // Delete the asterisk if it exists
+              if (isExisting) {
+                deleteAsterisk(currentNodeId);
+              }
+            }
+          });
+      }
+
+      // Plugin message listener
+      function setupPluginMessageListener() {
+        window.onmessage = (event) => {
+          const msg = event.data.pluginMessage;
+
+          if (!msg) return;
+
+          switch (msg.type) {
+            case "init-preferences":
+              preferences = msg.preferences;
+
+              // Add new properties if they don't exist (for users with existing preferences)
+              if (preferences.defaultSearchAction === undefined) {
+                preferences.defaultSearchAction = "navigate";
+              }
+
+              if (preferences.fieldOrder === undefined) {
+                preferences.fieldOrder = ["sourceUrl", "tags", "notes"];
+              }
+
+              updateTheme(preferences.theme);
+              updateAutosave();
+              updateSettingsUI();
+              break;
+
+            case "metadata-loaded":
+              displayMetadata(msg.data);
+              updateLayerInfo(msg.nodeName, msg.nodeId);
+              showLayerSelected();
+              break;
+
+            case "draft-loaded":
+              displayMetadata(msg.data);
+              updateLayerInfo(msg.nodeName, msg.nodeId);
+              showDraftStatus();
+              showLayerSelected();
+              break;
+
+            case "new-element":
+              clearForm();
+              updateLayerInfo(msg.nodeName, msg.nodeId);
+              showLayerSelected();
+              break;
+
+            case "no-selection":
+              clearForm();
+              showSelectLayer();
+              break;
+
+            case "selection-changed":
+              parent.postMessage(
+                { pluginMessage: { type: "get-metadata" } },
+                "*"
+              );
+              break;
+
+            case "all-tags":
+              allTags = msg.tags || [];
+              updateFilterTags();
+              break;
+
+            case "all-elements":
+              allElements = msg.elements || [];
+              console.log("Received elements:", allElements.length);
+              renderElementsList();
+              toggleEmptySearch();
+              break;
+          }
+        };
+      }
+
       // Update layer info
       function updateLayerInfo(nodeName, nodeId) {
         currentNodeName = nodeName;
@@ -1997,9 +2586,6 @@
         // Clear tags
         currentTags = [];
         updateTagsDisplay();
-
-        // Clear node ID
-        currentNodeId = "";
       }
 
       // Show layer selected state
@@ -2007,6 +2593,7 @@
         document.getElementById("layer-info").style.display = "flex";
         document.getElementById("select-layer").style.display = "none";
         document.getElementById("form-container").style.display = "block";
+        document.getElementById("welcome-content").style.display = "none";
       }
 
       // Show select layer state
@@ -2014,6 +2601,10 @@
         document.getElementById("layer-info").style.display = "none";
         document.getElementById("select-layer").style.display = "flex";
         document.getElementById("form-container").style.display = "none";
+        document.getElementById("welcome-content").style.display = "flex";
+
+        // Clear the current node ID
+        currentNodeId = "";
       }
 
       // Show draft status
@@ -2023,12 +2614,55 @@
         }
       }
 
+      // Delete an Asterisk
+      function deleteAsterisk(nodeId) {
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: "delete-asterisk",
+              nodeId: nodeId,
+            },
+          },
+          "*"
+        );
+
+        showNotification("Asterisk deleted", "warning");
+
+        // Refresh the elements list if we're in search tab
+        if (activeTab === "search") {
+          parent.postMessage(
+            {
+              pluginMessage: { type: "get-all-elements" },
+            },
+            "*"
+          );
+        }
+      }
+
       // Save metadata
       function saveMetadata() {
         // Get values from form
-        const sourceUrl = document.getElementById("source-url").value;
-        const notes = document.getElementById("notes").value;
+        const sourceUrl = document.getElementById("source-url").value.trim();
+        const notes = document.getElementById("notes").value.trim();
 
+        // Check if the note is empty
+        const hasTags = currentTags.length > 0;
+        const hasContent = sourceUrl !== "" || notes !== "" || hasTags;
+
+        if (!hasContent && currentNodeId) {
+          // If the note is empty and it's an existing note, delete it
+          deleteAsterisk(currentNodeId);
+          return;
+        } else if (!hasContent) {
+          // If it's a new note with no content, just show a message
+          showNotification(
+            "Cannot save empty note. Add some content first.",
+            "info"
+          );
+          return;
+        }
+
+        // Regular save logic for non-empty notes
         parent.postMessage(
           {
             pluginMessage: {
@@ -2042,15 +2676,17 @@
         );
 
         // Hide draft indicator
-        document.getElementById("status-indicator").style.display = "none";
+        document.getElementById("status-indicator").style.display = "flex";
 
         // Show notification
-        showNotification("Note saved successfully!");
+        showNotification("Note saved successfully!", "success");
 
         // Refresh the elements list if we're in search tab
         if (activeTab === "search") {
           parent.postMessage(
-            { pluginMessage: { type: "get-all-elements" } },
+            {
+              pluginMessage: { type: "get-all-elements" },
+            },
             "*"
           );
         }
@@ -2058,7 +2694,7 @@
 
       // Autosave draft
       function autosaveDraft() {
-        if (!currentNodeId) return;
+        if (!currentNodeId || !preferences.autosave) return;
 
         // Clear any existing timer
         if (autosaveTimer) {
@@ -2071,32 +2707,36 @@
           const sourceUrl = document.getElementById("source-url").value.trim();
           const notes = document.getElementById("notes").value.trim();
 
-          // Check if there's any content to save
-          const hasTags = currentTags.length > 0;
-          const hasContent = sourceUrl !== "" || notes !== "" || hasTags;
+          // Show status indicator
+          document.getElementById("status-indicator").style.display = "flex";
 
-          // Only save if there's actual content
-          if (hasContent) {
-            // Save directly instead of as draft
-            parent.postMessage(
-              {
-                pluginMessage: {
-                  type: "save-metadata", // or save-draft if you kept draft functionality
-                  sourceUrl,
-                  tags: currentTags,
-                  notes,
-                },
+          // Save directly
+          parent.postMessage(
+            {
+              pluginMessage: {
+                type: "save-metadata",
+                sourceUrl,
+                tags: currentTags,
+                notes,
               },
-              "*"
-            );
-          }
+            },
+            "*"
+          );
         }, 1000); // 1 second delay
       }
 
       // Show notification
-      function showNotification(message) {
+      function showNotification(message, type = "success") {
         const notification = document.getElementById("notification");
         notification.textContent = message;
+
+        // Remove all type classes first
+        notification.classList.remove("success", "warning", "info");
+
+        // Add the appropriate type class
+        notification.classList.add(type);
+
+        // Show the notification
         notification.classList.add("show");
 
         setTimeout(() => {
@@ -2111,8 +2751,18 @@
         // Clear existing tags
         filterContainer.innerHTML = "";
 
-        // Create filter tags from all unique tags
-        allTags.forEach((tag) => {
+        // Sort tags by count (primary) and then alphabetically (secondary)
+        const sortedTags = [...allTags].sort((a, b) => {
+          // First sort by count (descending)
+          if (b.count !== a.count) {
+            return b.count - a.count;
+          }
+          // Then sort alphabetically
+          return a.tag.localeCompare(b.tag);
+        });
+
+        // Create filter tags from sorted tags
+        sortedTags.forEach((tag) => {
           const filterTag = document.createElement("div");
           filterTag.className = "filter-tag";
           if (activeFilterTags.includes(tag.tag)) {
@@ -2206,13 +2856,19 @@
       }
 
       // Render elements list in search tab
-      // Render elements list in search tab
       function renderElementsList(filteredElements = null) {
         const elements = filteredElements || allElements;
         const elementsList = document.getElementById("asterisk-list");
 
         // Clear existing list
         elementsList.innerHTML = "";
+
+        console.log("Rendering elements list:", elements.length, "items");
+
+        if (elements.length === 0) {
+          console.log("No elements to display");
+          return;
+        }
 
         // Create elements list items
         elements.forEach((element) => {
@@ -2263,7 +2919,6 @@
           editButton.className = "icon-btn tooltip tooltip-left";
           editButton.setAttribute("data-tooltip", "Open Asterisk");
           editButton.innerHTML =
-            // '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
             '<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_38_125)"> <path d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z" fill="#759481"/></g><defs><clipPath id="clip0_38_125"><rect width="20" height="20" fill="white"/></clipPath></defs></svg>';
 
           editButton.addEventListener("click", (e) => {
@@ -2276,7 +2931,6 @@
           goToButton.className = "icon-btn tooltip tooltip-right";
           goToButton.setAttribute("data-tooltip", "Go to layer");
           goToButton.innerHTML =
-            // '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"></path></svg>';
             '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L20 9L12 15C12 14.1 12 12.2 12 11.2727C8.88642 10.8644 5.70793 10.6258 3.07089 12.6385C2.96589 12.7278 2.86089 12.8171 2.75271 12.9091C2.51083 13.1116 2.51083 13.1116 2.26407 13.3182C1.47998 14 0.590213 15.8757 0.207254 17.4545C0.147254 17.4545 0.0872543 17.4545 0.0254361 17.4545C-0.122715 14.9401 0.354838 12.8414 2.02544 10.9091C4.65424 8.00332 8.23599 6.94357 12 6.54545C12 6.54545 12 3.90909 12 3Z" fill="#759481"/><path d="M0.661749 13.0909C1.02539 13.6364 0.934498 13.6364 1.11632 14C1.29632 14 1.47632 14 1.66177 14C1.58724 14.1427 1.51271 14.2855 1.43592 14.4325C0.925534 15.4277 0.389107 16.6364 0.116379 17.9091C0.0563795 17.9091 0.0254489 17.5455 0.0254489 17.5455C-0.0413536 15.9892 0.163608 14.5705 0.661749 13.0909Z" fill="#759481"/></svg>';
           goToButton.addEventListener("click", (e) => {
             e.stopPropagation(); // Prevent triggering the parent click
@@ -2288,7 +2942,12 @@
 
           // Add event listener to the whole item to select it
           listItem.addEventListener("click", () => {
-            navigateToElement(element.nodeId);
+            // Use the default action based on user preferences
+            if (preferences.defaultSearchAction === "navigate") {
+              navigateToElement(element.nodeId);
+            } else {
+              openEditAsterisk(element.nodeId);
+            }
           });
 
           listItem.appendChild(content);
@@ -2330,11 +2989,12 @@
 
       // Navigate to element in Figma
       function navigateToElement(nodeId) {
+        console.log("Sending navigate message for node:", nodeId);
         parent.postMessage(
           {
             pluginMessage: {
               type: "navigate-to-node",
-              nodeId,
+              nodeId: nodeId,
             },
           },
           "*"
@@ -2346,59 +3006,96 @@
         const emptyState = document.getElementById("empty-search");
         const searchContent = document.getElementById("search-content");
 
-        if (allElements.length === 0) {
+        if (!allElements || allElements.length === 0) {
           emptyState.style.display = "flex";
           searchContent.style.display = "none";
+          console.log("Showing empty state");
         } else {
           emptyState.style.display = "none";
           searchContent.style.display = "block";
+          console.log(
+            "Showing search content with",
+            allElements.length,
+            "elements"
+          );
         }
       }
 
-      // Resize functionality
-      const resizeHandle = document.getElementById("resize-handle");
-      let isResizing = false;
-      let startWidth, startHeight;
+      // Setup resize handle
+      function setupResizeHandle() {
+        const resizeHandle = document.getElementById("resize-handle");
+        let isResizing = false;
+        let startWidth, startHeight;
 
-      const startResize = (e) => {
-        isResizing = true;
-        startWidth = window.innerWidth;
-        startHeight = window.innerHeight;
-        document.addEventListener("mousemove", resize);
-        document.addEventListener("mouseup", stopResize);
-        e.preventDefault();
-      };
+        const startResize = (e) => {
+          isResizing = true;
+          startWidth = window.innerWidth;
+          startHeight = window.innerHeight;
+          document.addEventListener("mousemove", resize);
+          document.addEventListener("mouseup", stopResize);
+          e.preventDefault();
+        };
 
-      const resize = (e) => {
-        if (!isResizing) return;
+        const resize = (e) => {
+          if (!isResizing) return;
 
-        const newWidth = startWidth + (e.clientX - startWidth);
-        const newHeight = startHeight + (e.clientY - startHeight);
+          const newWidth = startWidth + (e.clientX - startWidth);
+          const newHeight = startHeight + (e.clientY - startHeight);
 
-        // Minimum size constraints
-        const width = Math.max(350, newWidth);
-        const height = Math.max(500, newHeight);
+          // Minimum size constraints
+          const width = Math.max(350, newWidth);
+          const height = Math.max(500, newHeight);
 
-        // Tell the plugin to resize
-        parent.postMessage(
-          {
-            pluginMessage: {
-              type: "resize",
-              width,
-              height,
+          // Tell the plugin to resize
+          parent.postMessage(
+            {
+              pluginMessage: {
+                type: "resize",
+                width,
+                height,
+              },
             },
-          },
-          "*"
-        );
-      };
+            "*"
+          );
+        };
 
-      const stopResize = () => {
-        isResizing = false;
-        document.removeEventListener("mousemove", resize);
-        document.removeEventListener("mouseup", stopResize);
-      };
+        const stopResize = () => {
+          isResizing = false;
+          document.removeEventListener("mousemove", resize);
+          document.removeEventListener("mouseup", stopResize);
+        };
 
-      resizeHandle.addEventListener("mousedown", startResize);
+        resizeHandle.addEventListener("mousedown", startResize);
+      }
+
+      // Setup keyboard shortcuts
+      function setupKeyboardShortcuts() {
+        document.addEventListener("keydown", function (e) {
+          // Save with Ctrl/Cmd+S
+          if ((e.ctrlKey || e.metaKey) && e.key === "s" && currentNodeId) {
+            e.preventDefault();
+            saveMetadata();
+          }
+
+          // Clear form with Escape key
+          if (
+            e.key === "Escape" &&
+            activeTab === "add" &&
+            document.getElementById("form-container").style.display !== "none"
+          ) {
+            e.preventDefault();
+
+            if (confirm("Are you sure you want to clear all content?")) {
+              const isExisting = !!currentNodeId;
+              clearForm();
+
+              if (isExisting) {
+                deleteAsterisk(currentNodeId);
+              }
+            }
+          }
+        });
+      }
     </script>
     <script src="script.js"></script>
   </body>

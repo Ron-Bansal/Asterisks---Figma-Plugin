@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 360, height: 560, themeColors: true });
+figma.showUI(__html__, { width: 360, height: 580, themeColors: true });
 
 // Get user preferences or set defaults
 async function getUserPreferences() {
@@ -6,10 +6,22 @@ async function getUserPreferences() {
   if (!preferences) {
     preferences = {
       theme: "light", // 'light' or 'dark'
-      autosave: true, // Whether to autosave drafts
+      autosave: true, // Whether to autosave notes
+      defaultSearchAction: "navigate", // 'navigate' or 'open'
+      fieldOrder: ["sourceUrl", "tags", "notes"], // Order of fields in add/edit
     };
     await figma.clientStorage.setAsync("asterisk-preferences", preferences);
   }
+
+  // Add new properties if they don't exist (for users with existing preferences)
+  if (preferences.defaultSearchAction === undefined) {
+    preferences.defaultSearchAction = "navigate";
+  }
+
+  if (preferences.fieldOrder === undefined) {
+    preferences.fieldOrder = ["sourceUrl", "tags", "notes"];
+  }
+
   return preferences;
 }
 
@@ -151,12 +163,20 @@ figma.ui.onmessage = async (msg) => {
     }
 
     // Convert map to array of objects with tag and count
+    // Then sort first by count (descending), then alphabetically
     const tagsWithCount = Array.from(tagsMap.entries())
       .map(([tag, count]) => ({
         tag,
         count,
       }))
-      .sort((a, b) => b.count - a.count); // Sort by count in descending order
+      .sort((a, b) => {
+        // First sort by count
+        const countDiff = b.count - a.count;
+        if (countDiff !== 0) return countDiff;
+
+        // Then sort alphabetically
+        return a.tag.localeCompare(b.tag);
+      });
 
     figma.ui.postMessage({
       type: "all-tags",
@@ -226,6 +246,22 @@ figma.ui.onmessage = async (msg) => {
         error: true,
       });
     }
+  }
+
+  // Delete an asterisk
+  if (msg.type === "delete-asterisk") {
+    const nodeId = msg.nodeId;
+
+    // Delete the metadata from client storage
+    await figma.clientStorage.deleteAsync(`asterisk-${nodeId}`);
+
+    // Also delete any drafts
+    await figma.clientStorage.deleteAsync(`draft-${nodeId}`);
+
+    figma.notify("Note deleted");
+
+    // Refresh the UI
+    figma.ui.postMessage({ type: "selection-changed" });
   }
 };
 
