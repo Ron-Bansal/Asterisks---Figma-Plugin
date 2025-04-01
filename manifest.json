@@ -1,7 +1,9 @@
 {
   "name": "Asterisk",
-  "id": "asterisk-plugin",
+  "id": "1488498485297162626",
   "api": "1.0.0",
+  "networkAccess": { "allowedDomains": ["none"] },
+  "documentAccess": "dynamic-page",
   "main": "code.js",
   "ui": "ui.html",
   "editorType": ["figma"],

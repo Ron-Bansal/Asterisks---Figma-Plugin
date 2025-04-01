@@ -9,6 +9,12 @@ async function getUserPreferences() {
       autosave: true, // Whether to autosave notes
       defaultSearchAction: "navigate", // 'navigate' or 'open'
       fieldOrder: ["sourceUrl", "tags", "notes"], // Order of fields in add/edit
+      searchFields: {
+        showName: true, // Always true, can't be disabled
+        showNotes: true,
+        showTags: true,
+        showUrl: false,
+      },
     };
     await figma.clientStorage.setAsync("asterisk-preferences", preferences);
   }
@@ -22,7 +28,23 @@ async function getUserPreferences() {
     preferences.fieldOrder = ["sourceUrl", "tags", "notes"];
   }
 
+  if (preferences.searchFields === undefined) {
+    preferences.searchFields = {
+      showName: true,
+      showNotes: true,
+      showTags: true,
+      showUrl: false,
+    };
+  }
+
   return preferences;
+}
+
+// Helper function to create a context-aware storage key
+function getStorageKey(type, nodeId) {
+  const fileKey = figma.fileKey || 'local';
+  const pageId = figma.currentPage.id;
+  return `${type}-${fileKey}-${pageId}-${nodeId}`;
 }
 
 // Called when UI is first loaded
@@ -32,6 +54,14 @@ async function initializePlugin() {
     type: "init-preferences",
     preferences,
   });
+
+  // Send initial file and page context
+  figma.ui.postMessage({
+    type: "context-info",
+    fileKey: figma.fileKey || 'local',
+    pageId: figma.currentPage.id,
+    pageName: figma.currentPage.name
+  });
 }
 
 initializePlugin();
@@ -40,33 +70,56 @@ initializePlugin();
 figma.ui.onmessage = async (msg) => {
   if (msg.type === "save-metadata") {
     if (figma.currentPage.selection.length === 0) {
-      figma.notify("Please select an element first");
+      figma.ui.postMessage({
+        type: "save-failed",
+        message: "Please select an element first to save Asterisk"
+      });
       return;
     }
 
     const node = figma.currentPage.selection[0];
+    const storageKey = getStorageKey("asterisk", node.id);
 
-    // Save the metadata to the node
-    await figma.clientStorage.setAsync(`asterisk-${node.id}`, {
-      sourceUrl: msg.sourceUrl,
-      tags: msg.tags,
-      notes: msg.notes,
-      lastModified: Date.now(),
-    });
+    try {
+      // Save the metadata to the node
+      await figma.clientStorage.setAsync(storageKey, {
+        sourceUrl: msg.sourceUrl,
+        tags: msg.tags,
+        notes: msg.notes,
+        lastModified: Date.now(),
+        fileKey: figma.fileKey || 'local',
+        pageId: figma.currentPage.id,
+        pageName: figma.currentPage.name
+      });
 
-    // Delete draft after successful save
-    await figma.clientStorage.deleteAsync(`draft-${node.id}`);
+      // Delete draft after successful save
+      await figma.clientStorage.deleteAsync(getStorageKey("draft", node.id));
 
-    figma.notify("Note saved successfully!");
+      figma.ui.postMessage({
+        type: "save-success",
+        message: "Note saved successfully!"
+      });
+      
+      figma.notify("Note saved successfully!");
+    } catch (error) {
+      figma.ui.postMessage({
+        type: "save-failed",
+        message: "Failed to save note. Please try again."
+      });
+    }
   }
 
   if (msg.type === "edit-element") {
     const node = findNodeById(msg.nodeId);
     if (node) {
+      // If selectNode flag is true, select the node
+      if (msg.selectNode) {
+        figma.currentPage.selection = [node];
+      }
+      
       // Load the metadata
-      const metadata = await figma.clientStorage.getAsync(
-        `asterisk-${node.id}`
-      );
+      const storageKey = getStorageKey("asterisk", node.id);
+      const metadata = await figma.clientStorage.getAsync(storageKey);
 
       if (metadata) {
         figma.ui.postMessage({
@@ -83,6 +136,11 @@ figma.ui.onmessage = async (msg) => {
           nodeId: node.id,
         });
       }
+    } else {
+      figma.ui.postMessage({
+        type: "element-not-found",
+        message: "The selected element could not be found"
+      });
     }
   }
 
@@ -92,13 +150,16 @@ figma.ui.onmessage = async (msg) => {
     }
 
     const node = figma.currentPage.selection[0];
+    const storageKey = getStorageKey("draft", node.id);
 
     // Save draft metadata
-    await figma.clientStorage.setAsync(`draft-${node.id}`, {
+    await figma.clientStorage.setAsync(storageKey, {
       sourceUrl: msg.sourceUrl,
       tags: msg.tags,
       notes: msg.notes,
       lastModified: Date.now(),
+      fileKey: figma.fileKey || 'local',
+      pageId: figma.currentPage.id
     });
   }
 
@@ -114,7 +175,9 @@ figma.ui.onmessage = async (msg) => {
     const node = figma.currentPage.selection[0];
 
     // Check for draft first
-    const draft = await figma.clientStorage.getAsync(`draft-${node.id}`);
+    const draftKey = getStorageKey("draft", node.id);
+    const draft = await figma.clientStorage.getAsync(draftKey);
+    
     if (draft) {
       figma.ui.postMessage({
         type: "draft-loaded",
@@ -127,7 +190,8 @@ figma.ui.onmessage = async (msg) => {
     }
 
     // Then check for saved metadata
-    const metadata = await figma.clientStorage.getAsync(`asterisk-${node.id}`);
+    const storageKey = getStorageKey("asterisk", node.id);
+    const metadata = await figma.clientStorage.getAsync(storageKey);
 
     if (metadata) {
       figma.ui.postMessage({
@@ -147,9 +211,15 @@ figma.ui.onmessage = async (msg) => {
   }
 
   if (msg.type === "get-all-tags") {
-    // Get all unique tags across all elements for autocomplete
+    // Get all unique tags across all elements for current file and page
     const allKeys = await figma.clientStorage.keysAsync();
-    const metadataKeys = allKeys.filter((key) => key.startsWith("asterisk-"));
+    const fileKey = figma.fileKey || 'local';
+    const pageId = figma.currentPage.id;
+    
+    // Filter keys to only include asterisks from the current file and page
+    const metadataKeys = allKeys.filter(key => 
+      key.startsWith(`asterisk-${fileKey}-${pageId}-`)
+    );
 
     const tagsMap = new Map(); // Map to store tag counts
 
@@ -185,15 +255,21 @@ figma.ui.onmessage = async (msg) => {
   }
 
   if (msg.type === "get-all-elements") {
-    // Get all elements with metadata
+    // Get all elements with metadata in the current file and page
     const allKeys = await figma.clientStorage.keysAsync();
-    const metadataKeys = allKeys.filter((key) => key.startsWith("asterisk-"));
+    const fileKey = figma.fileKey || 'local';
+    const pageId = figma.currentPage.id;
+    
+    // Filter keys to only include asterisks from the current file and page
+    const metadataKeys = allKeys.filter(key => 
+      key.startsWith(`asterisk-${fileKey}-${pageId}-`)
+    );
 
     // Build the elements array with metadata
     const elements = [];
 
     for (const key of metadataKeys) {
-      const nodeId = key.replace("asterisk-", "");
+      const nodeId = key.split('-').pop(); // Get the node ID from the key
       const metadata = await figma.clientStorage.getAsync(key);
 
       // Try to find the node in the document
@@ -253,10 +329,10 @@ figma.ui.onmessage = async (msg) => {
     const nodeId = msg.nodeId;
 
     // Delete the metadata from client storage
-    await figma.clientStorage.deleteAsync(`asterisk-${nodeId}`);
+    await figma.clientStorage.deleteAsync(getStorageKey("asterisk", nodeId));
 
     // Also delete any drafts
-    await figma.clientStorage.deleteAsync(`draft-${nodeId}`);
+    await figma.clientStorage.deleteAsync(getStorageKey("draft", nodeId));
 
     figma.notify("Note deleted");
 
@@ -273,4 +349,14 @@ function findNodeById(id) {
 // Listen for selection changes
 figma.on("selectionchange", () => {
   figma.ui.postMessage({ type: "selection-changed" });
+});
+
+// Listen for page changes to update context
+figma.on("currentpagechange", () => {
+  figma.ui.postMessage({
+    type: "context-changed", 
+    fileKey: figma.fileKey || 'local',
+    pageId: figma.currentPage.id,
+    pageName: figma.currentPage.name
+  });
 });

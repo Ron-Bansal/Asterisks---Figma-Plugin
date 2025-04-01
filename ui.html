@@ -1169,7 +1169,7 @@
       }
 
       /* Notification */
-      .notification {
+      /* .notification {
         position: fixed;
         bottom: 16px;
         left: 50%;
@@ -1184,6 +1184,30 @@
         z-index: 1000;
         background-color: var(--primary-color);
         color: white;
+      } */
+
+      .notification {
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        padding: 8px 16px;
+        border-radius: var(--radius-full);
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: var(--shadow-md);
+        opacity: 0;
+        transition: transform 0.3s, opacity 0.3s;
+        z-index: 1000;
+        background-color: var(--primary-color);
+        color: white;
+
+        /* More flexible approach */
+        min-width: 220px;
+        max-width: 80%; /* Limits width to 80% of the container */
+        width: auto; /* Allows the notification to size based on content */
+        text-align: center; /* Centers the text */
+        /* No white-space: nowrap to allow wrapping for longer messages */
       }
 
       .notification.show {
@@ -2351,6 +2375,40 @@
         });
       }
 
+      // function switchTab(tabName) {
+      //   activeTab = tabName;
+
+      //   // Update tab buttons
+      //   document.querySelectorAll(".tab").forEach((tab) => {
+      //     tab.classList.remove("active");
+      //     if (tab.dataset.tab === tabName) {
+      //       tab.classList.add("active");
+      //     }
+      //   });
+
+      //   // Show/hide content based on active tab
+      //   if (tabName === "add") {
+      //     document.getElementById("add-tab-content").style.display = "block";
+      //     document.getElementById("search-tab-content").style.display = "none";
+      //   } else if (tabName === "search") {
+      //     document.getElementById("add-tab-content").style.display = "none";
+      //     document.getElementById("search-tab-content").style.display = "block";
+
+      //     // Refresh elements list when switching to search tab
+      //     parent.postMessage(
+      //       { pluginMessage: { type: "get-all-elements" } },
+      //       "*"
+      //     );
+      //     parent.postMessage({ pluginMessage: { type: "get-all-tags" } }, "*");
+
+      //     // Make sure the search results are displayed
+      //     setTimeout(() => {
+      //       renderElementsList();
+      //       toggleEmptySearch();
+      //     }, 100);
+      //   }
+      // }
+
       function switchTab(tabName) {
         activeTab = tabName;
 
@@ -2377,10 +2435,21 @@
           );
           parent.postMessage({ pluginMessage: { type: "get-all-tags" } }, "*");
 
-          // Make sure the search results are displayed
+          // After the messages are processed, make sure to apply the active filters
           setTimeout(() => {
             renderElementsList();
+            filterElements(); // Apply the active filters immediately
             toggleEmptySearch();
+
+            // Update the UI to show which filter tags are active
+            document.querySelectorAll(".filter-tag").forEach((tag) => {
+              const tagName = tag.querySelector("span").textContent;
+              if (activeFilterTags.includes(tagName)) {
+                tag.classList.add("active");
+              } else {
+                tag.classList.remove("active");
+              }
+            });
           }, 100);
         }
       }
@@ -3075,7 +3144,7 @@
           "*"
         );
 
-        showNotification("Asterisk deleted", "warning");
+        showNotification("No content. Removed Asterisk", "warning");
 
         // Refresh the elements list if we're in search tab
         if (activeTab === "search") {
@@ -3446,6 +3515,7 @@
             pluginMessage: {
               type: "edit-element",
               nodeId: nodeId,
+              selectNode: true, // This is the key addition AND select the node
             },
           },
           "*"
