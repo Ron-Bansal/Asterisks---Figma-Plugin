@@ -1126,7 +1126,7 @@
         background-color: var(--bg-color);
         border-radius: var(--radius-sm);
         color: var(--text-secondary);
-        color: #7F6F5D;
+        color: #7f6f5d;
         flex-shrink: 0;
       }
 
@@ -2038,8 +2038,8 @@
             >
               <path
                 d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z"
-                fill="#759481"
-                opacity="0.4"
+                fill="#E4D9CB"
+                opacity="0.8"
               />
             </svg>
           </div>
@@ -2368,6 +2368,17 @@
     </div>
     <script>
       // Global state
+      let currentContext = {
+        fileKey: null,
+        pageId: null,
+        pageName: null,
+      };
+      let currentFileContext = {
+        fileKey: null,
+        pageId: null,
+        pageName: null,
+        timestamp: 0,
+      };
       let currentTags = [];
       let currentNodeName = "";
       let currentNodeId = "";
@@ -2467,6 +2478,51 @@
       //   }
       // }
 
+      // function switchTab(tabName) {
+      //   activeTab = tabName;
+
+      //   // Update tab buttons
+      //   document.querySelectorAll(".tab").forEach((tab) => {
+      //     tab.classList.remove("active");
+      //     if (tab.dataset.tab === tabName) {
+      //       tab.classList.add("active");
+      //     }
+      //   });
+
+      //   // Show/hide content based on active tab
+      //   if (tabName === "add") {
+      //     document.getElementById("add-tab-content").style.display = "block";
+      //     document.getElementById("search-tab-content").style.display = "none";
+      //   } else if (tabName === "search") {
+      //     document.getElementById("add-tab-content").style.display = "none";
+      //     document.getElementById("search-tab-content").style.display = "block";
+
+      //     // Refresh elements list when switching to search tab
+      //     parent.postMessage(
+      //       { pluginMessage: { type: "get-all-elements" } },
+      //       "*"
+      //     );
+      //     parent.postMessage({ pluginMessage: { type: "get-all-tags" } }, "*");
+
+      //     // After the messages are processed, make sure to apply the active filters
+      //     setTimeout(() => {
+      //       renderElementsList();
+      //       filterElements(); // Apply the active filters immediately
+      //       toggleEmptySearch();
+
+      //       // Update the UI to show which filter tags are active
+      //       document.querySelectorAll(".filter-tag").forEach((tag) => {
+      //         const tagName = tag.querySelector("span").textContent;
+      //         if (activeFilterTags.includes(tagName)) {
+      //           tag.classList.add("active");
+      //         } else {
+      //           tag.classList.remove("active");
+      //         }
+      //       });
+      //     }, 100);
+      //   }
+      // }
+
       function switchTab(tabName) {
         activeTab = tabName;
 
@@ -2486,29 +2542,30 @@
           document.getElementById("add-tab-content").style.display = "none";
           document.getElementById("search-tab-content").style.display = "block";
 
-          // Refresh elements list when switching to search tab
+          // Reset active filters
+          activeFilterTags = [];
+
+          // Clear all previously loaded tags and elements
+          allTags = [];
+          allElements = [];
+          updateFilterTags();
+
+          // Request fresh data for current file context
+          console.log(
+            `[STRICT] Requesting fresh data for file="${currentFileContext.fileKey}", page="${currentFileContext.pageName}"`
+          );
+
+          // Show loading state
+          document.getElementById(
+            "asterisk-list"
+          ).innerHTML = `<div style="text-align: center; padding: 20px;">Loading data for "${currentFileContext.pageName}"...</div>`;
+
+          // Request fresh data
           parent.postMessage(
             { pluginMessage: { type: "get-all-elements" } },
             "*"
           );
           parent.postMessage({ pluginMessage: { type: "get-all-tags" } }, "*");
-
-          // After the messages are processed, make sure to apply the active filters
-          setTimeout(() => {
-            renderElementsList();
-            filterElements(); // Apply the active filters immediately
-            toggleEmptySearch();
-
-            // Update the UI to show which filter tags are active
-            document.querySelectorAll(".filter-tag").forEach((tag) => {
-              const tagName = tag.querySelector("span").textContent;
-              if (activeFilterTags.includes(tagName)) {
-                tag.classList.add("active");
-              } else {
-                tag.classList.remove("active");
-              }
-            });
-          }, 100);
         }
       }
 
@@ -3036,7 +3093,7 @@
           });
       }
 
-      // Plugin message listener
+      // Full updated setupPluginMessageListener function
       function setupPluginMessageListener() {
         window.onmessage = (event) => {
           const msg = event.data.pluginMessage;
@@ -3068,6 +3125,58 @@
               updateTheme(preferences.theme);
               updateAutosave();
               updateSettingsUI();
+              break;
+
+            case "context-info":
+            case "context-changed":
+              // Store file context info
+              currentFileContext = {
+                fileKey: msg.fileKey,
+                pageId: msg.pageId,
+                pageName: msg.pageName,
+                timestamp: Date.now(),
+              };
+
+              console.log(
+                `[STRICT] Context set to file="${msg.fileKey}", page="${msg.pageName}"`
+              );
+
+              // Reset all filter state
+              activeFilterTags = [];
+              allTags = [];
+              allElements = [];
+
+              // Request fresh data with current context
+              parent.postMessage(
+                { pluginMessage: { type: "get-all-tags" } },
+                "*"
+              );
+              parent.postMessage(
+                { pluginMessage: { type: "get-all-elements" } },
+                "*"
+              );
+
+              // If in search tab, update UI
+              if (activeTab === "search") {
+                // Clear active filter buttons
+                document.querySelectorAll(".filter-tag").forEach((tag) => {
+                  tag.classList.remove("active");
+                });
+
+                // Show loading state
+                const searchStatus = document.getElementById("search-status");
+                if (searchStatus) {
+                  searchStatus.textContent = `Loading data from "${msg.pageName}"...`;
+                }
+
+                // Clear search input
+                document.getElementById("search-input").value = "";
+
+                // Show loading state
+                const asteriskList = document.getElementById("asterisk-list");
+                asteriskList.innerHTML =
+                  '<div style="text-align: center; padding: 20px;">Loading...</div>';
+              }
               break;
 
             case "metadata-loaded":
@@ -3102,15 +3211,83 @@
               break;
 
             case "all-tags":
+              console.log(
+                `[STRICT] Received ${
+                  msg.tags?.length || 0
+                } tags for file context:`,
+                msg._debug || "unknown"
+              );
+
+              // STRICT VERIFICATION: Only accept tag data for current file context
+              if (
+                msg._debug &&
+                msg._debug.fileKey !== currentFileContext.fileKey
+              ) {
+                console.log(
+                  `[STRICT] REJECTED tags - wrong file (got ${msg._debug.fileKey}, expected ${currentFileContext.fileKey})`
+                );
+                return;
+              }
+
+              // Update tags array
               allTags = msg.tags || [];
+
+              // Log each tag for debugging
+              if (allTags.length > 0) {
+                console.log(
+                  "[STRICT] Tags received:",
+                  allTags.map((t) => `${t.tag} (${t.count})`).join(", ")
+                );
+              } else {
+                console.log("[STRICT] No tags found for this file/page");
+              }
+
+              // Update the UI
               updateFilterTags();
+              if (activeTab === "search") {
+                toggleEmptySearch();
+              }
               break;
 
             case "all-elements":
+              console.log(
+                `[STRICT] Received ${
+                  msg.elements?.length || 0
+                } elements for file context:`,
+                msg._debug || "unknown"
+              );
+
+              // STRICT VERIFICATION: Only accept element data for current file context
+              if (
+                msg._debug &&
+                msg._debug.fileKey !== currentFileContext.fileKey
+              ) {
+                console.log(
+                  `[STRICT] REJECTED elements - wrong file (got ${msg._debug.fileKey}, expected ${currentFileContext.fileKey})`
+                );
+                return;
+              }
+
+              // Update elements array
               allElements = msg.elements || [];
-              console.log("Received elements:", allElements.length);
+
+              // Update the UI
               renderElementsList();
               toggleEmptySearch();
+
+              // Update search status
+              const searchStatus = document.getElementById("search-status");
+              if (searchStatus && activeTab === "search") {
+                searchStatus.textContent =
+                  allElements.length > 0
+                    ? `Showing ${allElements.length} Asterisks in "${currentFileContext.pageName}"`
+                    : `No Asterisks in "${currentFileContext.pageName}"`;
+              }
+              break;
+
+            // Keep any other case handlers you already have
+            default:
+              // Handle any other message types as before
               break;
           }
         };
@@ -3321,24 +3498,79 @@
       }
 
       // Update filter tags in search tab
+      // function updateFilterTags() {
+      //   const filterContainer = document.getElementById("filter-tags");
+
+      //   // Clear existing tags
+      //   filterContainer.innerHTML = "";
+
+      //   // Sort tags by count (primary) and then alphabetically (secondary)
+      //   const sortedTags = [...allTags].sort((a, b) => {
+      //     // First sort by count (descending)
+      //     if (b.count !== a.count) {
+      //       return b.count - a.count;
+      //     }
+      //     // Then sort alphabetically
+      //     return a.tag.localeCompare(b.tag);
+      //   });
+
+      //   // Create filter tags from sorted tags
+      //   sortedTags.forEach((tag) => {
+      //     const filterTag = document.createElement("div");
+      //     filterTag.className = "filter-tag";
+      //     if (activeFilterTags.includes(tag.tag)) {
+      //       filterTag.classList.add("active");
+      //     }
+
+      //     const tagName = document.createElement("span");
+      //     tagName.textContent = tag.tag;
+
+      //     const countBadge = document.createElement("span");
+      //     countBadge.className = "filter-count";
+      //     countBadge.textContent = tag.count;
+
+      //     filterTag.appendChild(tagName);
+      //     filterTag.appendChild(countBadge);
+
+      //     filterTag.addEventListener("click", () => {
+      //       toggleFilterTag(tag.tag);
+      //     });
+
+      //     filterContainer.appendChild(filterTag);
+      //   });
+      // }
+
       function updateFilterTags() {
         const filterContainer = document.getElementById("filter-tags");
 
         // Clear existing tags
         filterContainer.innerHTML = "";
 
-        // Sort tags by count (primary) and then alphabetically (secondary)
-        const sortedTags = [...allTags].sort((a, b) => {
-          // First sort by count (descending)
-          if (b.count !== a.count) {
-            return b.count - a.count;
-          }
-          // Then sort alphabetically
-          return a.tag.localeCompare(b.tag);
-        });
+        console.log(
+          `[STRICT] Updating filter tags UI with ${allTags.length} tags for file="${currentFileContext.fileKey}", page="${currentFileContext.pageName}"`
+        );
 
-        // Create filter tags from sorted tags
-        sortedTags.forEach((tag) => {
+        // No tags? Show a message
+        if (!allTags || allTags.length === 0) {
+          const noTagsMsg = document.createElement("div");
+          noTagsMsg.textContent = `No tags in "${currentFileContext.pageName}"`;
+          noTagsMsg.style.color = "var(--text-secondary)";
+          noTagsMsg.style.padding = "10px 0";
+          noTagsMsg.style.fontStyle = "italic";
+          filterContainer.appendChild(noTagsMsg);
+          return;
+        }
+
+        // Create filter tags
+        allTags.forEach((tag) => {
+          // EXTRA VERIFICATION: Only include tags from current file
+          if (tag._fileKey && tag._fileKey !== currentFileContext.fileKey) {
+            console.log(
+              `[STRICT] Skipping tag "${tag.tag}" from wrong file ${tag._fileKey}`
+            );
+            return;
+          }
+
           const filterTag = document.createElement("div");
           filterTag.className = "filter-tag";
           if (activeFilterTags.includes(tag.tag)) {
@@ -3361,6 +3593,50 @@
 
           filterContainer.appendChild(filterTag);
         });
+      }
+
+      // Full updated filterElements function
+      function filterElements() {
+        const searchQuery = document
+          .getElementById("search-input")
+          .value.toLowerCase();
+
+        // Filter elements based on tags and search query and ensure they're from current file
+        let filteredElements = allElements;
+
+        // Verify all elements are from current file
+        filteredElements = filteredElements.filter((element) => {
+          return (
+            !element._fileKey || element._fileKey === currentFileContext.fileKey
+          );
+        });
+
+        if (activeFilterTags.length > 0) {
+          filteredElements = filteredElements.filter((element) => {
+            return activeFilterTags.every((tag) => element.tags.includes(tag));
+          });
+        }
+
+        if (searchQuery) {
+          filteredElements = filteredElements.filter((element) => {
+            return (
+              element.nodeName.toLowerCase().includes(searchQuery) ||
+              (element.sourceUrl &&
+                element.sourceUrl.toLowerCase().includes(searchQuery)) ||
+              element.tags.some((tag) =>
+                tag.toLowerCase().includes(searchQuery)
+              ) ||
+              (element.notes &&
+                element.notes.toLowerCase().includes(searchQuery))
+            );
+          });
+        }
+
+        // Render filtered elements
+        renderElementsList(filteredElements);
+
+        // Update search status
+        updateSearchStatus(filteredElements.length);
       }
 
       // Toggle filter tag
@@ -3606,6 +3882,25 @@
       }
 
       // Toggle empty search state
+      // function toggleEmptySearch() {
+      //   const emptyState = document.getElementById("empty-search");
+      //   const searchContent = document.getElementById("search-content");
+
+      //   if (!allElements || allElements.length === 0) {
+      //     emptyState.style.display = "flex";
+      //     searchContent.style.display = "none";
+      //     console.log("Showing empty state");
+      //   } else {
+      //     emptyState.style.display = "none";
+      //     searchContent.style.display = "block";
+      //     console.log(
+      //       "Showing search content with",
+      //       allElements.length,
+      //       "elements"
+      //     );
+      //   }
+      // }
+
       function toggleEmptySearch() {
         const emptyState = document.getElementById("empty-search");
         const searchContent = document.getElementById("search-content");
@@ -3613,14 +3908,14 @@
         if (!allElements || allElements.length === 0) {
           emptyState.style.display = "flex";
           searchContent.style.display = "none";
-          console.log("Showing empty state");
+          console.log(
+            `[STRICT] Showing empty state for file="${currentFileContext.fileKey}"`
+          );
         } else {
           emptyState.style.display = "none";
           searchContent.style.display = "block";
           console.log(
-            "Showing search content with",
-            allElements.length,
-            "elements"
+            `[STRICT] Showing search content with ${allElements.length} elements for file="${currentFileContext.fileKey}"`
           );
         }
       }
