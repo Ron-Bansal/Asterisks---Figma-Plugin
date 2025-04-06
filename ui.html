@@ -113,11 +113,13 @@
 
       .tab:hover {
         color: var(--text-color);
-        background-color: var(--bg-secondary);
+        background-color: var(--primary-bg-hover);
+        background-color: var(--overlay-hover);
       }
 
       .tab.active {
         color: var(--bg-secondary);
+        color: #fcfcfc;
         background-color: var(--primary-color);
       }
 
@@ -173,11 +175,13 @@
         justify-content: center;
         gap: 8px;
         padding: 10px 16px;
-        background-color: var(--green-600);
+        /* background-color: var(--green-600); */
+        background-color: var(--brown-700);
         color: white;
+        color: #e8eee9;
         border: none;
         border-radius: var(--radius-md);
-        font-weight: 600;
+        font-weight: 550;
         font-size: 14px;
         cursor: pointer;
         transition: background-color 0.2s, transform 0.1s;
@@ -206,7 +210,8 @@
         background-color: var(--bg-secondary);
         border-radius: var(--radius-md);
         margin-bottom: 8px;
-        border-left: 3px solid var(--green-600);
+        /* border-left: 3px solid var(--green-600); */
+        border-left: 3px solid var(--brown-700);
       }
 
       .layer-icon {
@@ -320,6 +325,7 @@
         border: 1px solid var(--border-color);
         border-radius: var(--radius-md);
         color: var(--text-secondary);
+        color: var(--brown-700);
         font-size: 13px;
         cursor: pointer;
         font-weight: 500;
@@ -367,8 +373,7 @@
         gap: 4px;
         padding: 4px 8px 4px 10px;
         background-color: var(--tag-bg);
-        background-color: #e8eee9;
-        border: 1px solid var(--tag-border);
+        /* border: 1px solid var(--tag-border); */
         border-radius: var(--radius-full);
         color: var(--tag-color);
         font-size: 13px;
@@ -455,7 +460,7 @@
         padding-bottom: 2px;
         background-color: var(--card-bg);
         background-color: var(--bg-secondary);
-        border: 1px solid var(--border-color);
+        /* border: 0.3px solid var(--border-color); */
         border-radius: var(--radius-full);
         color: var(--text-secondary);
         font-size: 13px;
@@ -465,15 +470,19 @@
 
       .filter-tag:hover {
         background-color: #759481aa;
+        background-color: var(--brown-700);
         color: #e8eee9;
+        color: var(--primary-bg-hover);
       }
 
       .filter-tag:hover .filter-count {
         color: #e8eee9;
+        color: var(--primary-bg-hover);
       }
 
       .filter-tag.active {
-        background-color: var(--green-600);
+        /* background-color: var(--green-600); */
+        background-color: var(--brown-700);
         color: #e8eee9;
       }
 
@@ -522,6 +531,7 @@
         padding-left: 4px;
         padding-right: 6px;
         background-color: var(--card-bg);
+        background-color: var(--brown-100);
         border-radius: var(--radius-md);
         border: 1px solid var(--border-color);
         border-left: none;
@@ -532,6 +542,7 @@
       .asterisk-item:hover {
         border-color: var(--border-hover);
         background-color: var(--bg-secondary);
+        background-color: var(--brown-150);
       }
 
       .asterisk-content {
@@ -560,6 +571,7 @@
 
       .asterisk-url {
         color: var(--primary-color);
+        color: var(--brown-750);
         font-size: 12px;
         white-space: nowrap;
         overflow: hidden;
@@ -582,7 +594,9 @@
         padding: 2px 6px;
         background-color: var(--card-bg);
         border-radius: var(--radius-full);
-        color: var(--green-750);
+        /* color: var(--green-750); */
+        color: var(--brown-600);
+        color: var(--brown-750);
         font-size: 11px;
         font-weight: 500;
         letter-spacing: 0.3px;
@@ -674,6 +688,7 @@
                     color: var(--text-color);
                     line-height: 125%;
                   } */
+
       .select-layer {
         padding: 12px 8px;
         background-color: var(--bg-secondary);
@@ -707,6 +722,7 @@
         font-size: 13px;
         color: var(--text-secondary);
         color: var(--bg-color);
+        color: #e9e9e9;
       }
 
       .select-layer-text {
@@ -715,6 +731,8 @@
         color: var(--text-color);
         line-height: 125%;
         color: var(--bg-color);
+        color: #fafafa;
+        margin-top: -1px;
       }
 
       /* Welcome content */
@@ -769,7 +787,8 @@
         height: 24px;
         border-radius: 50%;
         background-color: var(--card-bg);
-        border: 1px solid var(--primary-color);
+        background-color: var(--brown-150);
+        /* border: 0.4px solid var(--brown-700); */
         color: var(--primary-color);
         display: flex;
         align-items: center;
@@ -790,6 +809,7 @@
         gap: 8px;
         padding: 12px;
         background-color: var(--card-bg);
+        background-color: var(--brown-150);
         border-radius: var(--radius-md);
         margin-top: 8px;
         max-width: 300px;
@@ -865,6 +885,7 @@
         border-radius: var(--radius-md);
         box-shadow: var(--shadow-lg);
         border: 1px solid var(--border-color);
+        border: 0.1px solid var(--brown-500);
         width: 285px;
         max-height: calc(100vh - 80px);
         overflow-y: auto;
@@ -997,6 +1018,7 @@
         display: inline-block;
         width: 36px;
         height: 20px;
+        margin-left: 6px;
       }
 
       .toggle-switch input {
@@ -1026,6 +1048,7 @@
         left: 2px;
         bottom: 2px;
         background-color: var(--text-secondary);
+        background-color: var(--primary-color);
         transition: 0.4s;
         border-radius: 50%;
       }
@@ -1103,6 +1126,7 @@
         background-color: var(--bg-color);
         border-radius: var(--radius-sm);
         color: var(--text-secondary);
+        color: #7F6F5D;
         flex-shrink: 0;
       }
 
@@ -1497,8 +1521,8 @@
         --danger-color: #e53e3e;
         --danger-hover: #c53030;
 
-        /* Light theme */
-        --bg-color: #f4f7f4;
+        /* Light theme - Green */
+        /* --bg-color: #f4f7f4;
         --bg-secondary: #e8eee9;
         --card-bg: #f4f7f4;
         --text-color: #2c3436;
@@ -1512,6 +1536,40 @@
         --primary-bg: var(--green-500);
         --primary-bg-hover: var(--green-600);
         --tag-bg: #e8eee9;
+        --input-bg: #ffffff;
+        --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+        --shadow-md: 0 2px 4px rgba(16, 24, 40, 0.05);
+        --shadow-lg: 0 4px 8px rgba(16, 24, 40, 0.05);
+        --radius-sm: 0px;
+        --radius-md: 0px;
+        --radius-lg: 0px;
+        --radius-full: 9999px;
+      } */
+
+        --brown-500: #60a5a9;
+        --brown-600: #e4d9cb;
+        --brown-700: #7e6f5d;
+        --brown-750: #5f4728;
+        --brown-150: #e4d9cbb0;
+        --brown-100: #f8f3ed;
+
+        /* Light theme - Earth */
+        /* --bg-color: #f5efe6b9; */
+        --bg-color: var(--brown-100);
+        /* --bg-secondary: #e8eee9; */
+        --bg-secondary: var(--brown-600);
+        --card-bg: #f5efe6;
+        --text-color: #2c3436;
+        --text-secondary: #6b7780;
+        --text-placeholder: #a1a9b3;
+        --text-disabled: #c4c9ce;
+        --border-color: #e1e6e9;
+        --border-hover: #d1d6d9;
+        --primary-color: var(--brown-700);
+        --primary-hover: var(--brown-750);
+        --primary-bg: var(--brown-500);
+        --primary-bg-hover: var(--brown-600);
+        --tag-bg: var(--brown-600);
         --input-bg: #ffffff;
         --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
         --shadow-md: 0 2px 4px rgba(16, 24, 40, 0.05);
@@ -1636,7 +1694,7 @@
             >
               <path
                 d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z"
-                fill="#F4F7F4"
+                fill="#F8F3ED"
               />
             </svg>
           </span>
@@ -1685,8 +1743,8 @@
             >
               <path
                 d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z"
-                fill="#759481"
-                opacity="0.4"
+                fill="#E4D9CB"
+                opacity="0.8"
               />
             </svg>
           </div>
@@ -1896,7 +1954,7 @@
                   >
                     <path
                       d="M12 3L20 9L12 15C12 14.1 12 12.2 12 11.2727C8.88642 10.8644 5.70793 10.6258 3.07089 12.6385C2.96589 12.7278 2.86089 12.8171 2.75271 12.9091C2.51083 13.1116 2.51083 13.1116 2.26407 13.3182C1.47998 14 0.590213 15.8757 0.207254 17.4545C0.147254 17.4545 0.0872543 17.4545 0.0254361 17.4545C-0.122715 14.9401 0.354838 12.8414 2.02544 10.9091C4.65424 8.00332 8.23599 6.94357 12 6.54545C12 6.54545 12 3.90909 12 3Z"
-                      fill="currentColor"
+                      fill="#7E6F5D"
                     />
                   </svg>
                   Go to layer
@@ -3464,7 +3522,7 @@
           editButton.className = "icon-btn tooltip tooltip-left";
           editButton.setAttribute("data-tooltip", "Open Asterisk");
           editButton.innerHTML =
-            '<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_38_125)"> <path d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z" fill="#759481"/></g><defs><clipPath id="clip0_38_125"><rect width="20" height="20" fill="white"/></clipPath></defs></svg>';
+            '<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_38_125)"> <path d="M9.07137 19.7287L8.82789 12.0348L2.54615 16.2713L0.306152 11.9374L7.41572 9.35654L1.52354 4.77915L4.98094 1.32176L9.55833 7.21393L12.1392 0.10437L16.5218 2.34437L12.2366 8.62611L19.9305 8.86959L19.1514 13.6905L11.7983 11.5478L13.9409 18.9496L9.07137 19.7287Z" fill="#7E6F5D"/></g><defs><clipPath id="clip0_38_125"><rect width="20" height="20" fill="white"/></clipPath></defs></svg>';
 
           editButton.addEventListener("click", (e) => {
             e.stopPropagation(); // Prevent triggering the parent click
@@ -3476,7 +3534,7 @@
           goToButton.className = "icon-btn tooltip tooltip-right";
           goToButton.setAttribute("data-tooltip", "Go to layer");
           goToButton.innerHTML =
-            '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L20 9L12 15C12 14.1 12 12.2 12 11.2727C8.88642 10.8644 5.70793 10.6258 3.07089 12.6385C2.96589 12.7278 2.86089 12.8171 2.75271 12.9091C2.51083 13.1116 2.51083 13.1116 2.26407 13.3182C1.47998 14 0.590213 15.8757 0.207254 17.4545C0.147254 17.4545 0.0872543 17.4545 0.0254361 17.4545C-0.122715 14.9401 0.354838 12.8414 2.02544 10.9091C4.65424 8.00332 8.23599 6.94357 12 6.54545C12 6.54545 12 3.90909 12 3Z" fill="#759481"/><path d="M0.661749 13.0909C1.02539 13.6364 0.934498 13.6364 1.11632 14C1.29632 14 1.47632 14 1.66177 14C1.58724 14.1427 1.51271 14.2855 1.43592 14.4325C0.925534 15.4277 0.389107 16.6364 0.116379 17.9091C0.0563795 17.9091 0.0254489 17.5455 0.0254489 17.5455C-0.0413536 15.9892 0.163608 14.5705 0.661749 13.0909Z" fill="#759481"/></svg>';
+            '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L20 9L12 15C12 14.1 12 12.2 12 11.2727C8.88642 10.8644 5.70793 10.6258 3.07089 12.6385C2.96589 12.7278 2.86089 12.8171 2.75271 12.9091C2.51083 13.1116 2.51083 13.1116 2.26407 13.3182C1.47998 14 0.590213 15.8757 0.207254 17.4545C0.147254 17.4545 0.0872543 17.4545 0.0254361 17.4545C-0.122715 14.9401 0.354838 12.8414 2.02544 10.9091C4.65424 8.00332 8.23599 6.94357 12 6.54545C12 6.54545 12 3.90909 12 3Z" fill="#7E6F5D"/><path d="M0.661749 13.0909C1.02539 13.6364 0.934498 13.6364 1.11632 14C1.29632 14 1.47632 14 1.66177 14C1.58724 14.1427 1.51271 14.2855 1.43592 14.4325C0.925534 15.4277 0.389107 16.6364 0.116379 17.9091C0.0563795 17.9091 0.0254489 17.5455 0.0254489 17.5455C-0.0413536 15.9892 0.163608 14.5705 0.661749 13.0909Z" fill="#759481"/></svg>';
           goToButton.addEventListener("click", (e) => {
             e.stopPropagation(); // Prevent triggering the parent click
             navigateToElement(element.nodeId);
